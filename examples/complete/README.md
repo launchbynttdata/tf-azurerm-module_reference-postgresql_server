@@ -1,5 +1,7 @@
 # complete
 
+When running locally without service principal credentials, set `var.use_service_principal` to `false`
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 

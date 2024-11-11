@@ -95,6 +95,12 @@ variable "class_env" {
   }
 }
 
+variable "use_azure_region_abbr" {
+  description = "Abbreviate the region in the resource names"
+  type        = bool
+  default     = true
+}
+
 variable "location" {
   description = "Location of the Postgres Flexible Server"
   type        = string

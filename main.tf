@@ -24,6 +24,7 @@ module "resource_names" {
   instance_env            = var.instance_env
   maximum_length          = each.value.max_length
   instance_resource       = var.instance_resource
+  use_azure_region_abbr   = var.use_azure_region_abbr
 }
 
 module "resource_group" {

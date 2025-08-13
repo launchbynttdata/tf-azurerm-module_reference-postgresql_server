@@ -340,3 +340,52 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "request_message" {
+  description = <<EOT
+    A message passed to the owner of the remote resource when the private endpoint attempts to establish the connection
+    to the remote resource. The request message can be a maximum of 140 characters in length.
+    Only valid if `is_manual_connection=true`
+  EOT
+  type        = string
+  default     = ""
+}
+
+variable "subnet_id" {
+  description = <<EOT
+    The ID of the Subnet from which Private IP Addresses will be allocated for this Private Endpoint.
+    Changing this forces a new resource to be created.
+  EOT
+  type        = string
+  default     = null
+}
+
+variable "private_dns_zone_group_name" {
+  description = "Specifies the Name of the Private DNS Zone Group."
+  type        = string
+  default     = "psql"
+}
+
+variable "private_dns_zone_ids" {
+  description = "A list of Private DNS Zone IDs to link with the Private Endpoint."
+  type        = list(string)
+  default     = []
+}
+
+variable "is_manual_connection" {
+  description = <<EOT
+    Does the Private Endpoint require Manual Approval from the remote resource owner? Changing this forces a new resource
+    to be created.
+  EOT
+  type        = bool
+  default     = false
+}
+variable "subresource_names" {
+  description = <<EOT
+    A list of subresource names which the Private Endpoint is able to connect to. subresource_names corresponds to group_id.
+    Possible values are detailed in the product documentation in the Subresources column.
+    https://docs.microsoft.com/azure/private-link/private-endpoint-overview#private-link-resource
+  EOT
+  type        = list(string)
+  default     = ["psql"]
+}

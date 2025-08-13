@@ -101,3 +101,25 @@ module "postgresql_server_ad_administrator" {
   principal_name = var.ad_administrator.principal_name
   principal_type = var.ad_administrator.principal_type
 }
+
+module "private_endpoint" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm"
+  version = "~> 1.0"
+
+  count = var.public_network_access_enabled ? 0 : 1
+
+  endpoint_name                   = local.endpoint_name
+  resource_group_name             = local.resource_group_name
+  region                          = var.location
+  subnet_id                       = var.subnet_id
+  private_dns_zone_group_name     = var.private_dns_zone_group_name
+  private_dns_zone_ids            = var.private_dns_zone_ids
+  is_manual_connection            = var.is_manual_connection
+  private_connection_resource_id  = module.postgresql_server.postgresql_server_id
+  subresource_names               = var.subresource_names
+  request_message                 = var.request_message
+  tags                            = local.private_endpoint_tags
+  private_service_connection_name = local.private_service_connection_name
+
+  depends_on = [module.postgresql_server]
+}

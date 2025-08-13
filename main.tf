@@ -44,7 +44,7 @@ module "postgresql_server" {
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name
   location            = var.location
-
+  
   create_mode      = var.create_mode
   postgres_version = var.postgres_version
   sku_name         = var.sku_name

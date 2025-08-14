@@ -1,14 +1,14 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 module "resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
@@ -146,15 +146,29 @@ variable "enable_private_endpoint" {
 }
 
 variable "private_endpoint_subnet_id" {
-  description = "Subnet ID for private endpoint"
+  description = "Subnet ID for the private endpoint"
   type        = string
   default     = ""
+  validation {
+    condition     = length(var.private_endpoint_subnet_id) > 0
+    error_message = "private_endpoint_subnet_id must be provided when enable_private_endpoint is true."
+  }
 }
 
 variable "postgres_private_dns_zone_id" {
   description = "ID of the private DNS zone for PostgreSQL"
   type        = string
   default     = ""
+}
+
+variable "private_dns_zone_ids" {
+  description = "List of private DNS zone IDs for PostgreSQL"
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = var.enable_private_endpoint ? length(var.private_dns_zone_ids) > 0 : true
+    error_message = "private_dns_zone_ids must be provided when enable_private_endpoint is true."
+  }
 }
 
 resource "azurerm_private_endpoint" "postgresql" {
@@ -173,7 +187,7 @@ resource "azurerm_private_endpoint" "postgresql" {
 
   private_dns_zone_group {
     name                 = "default"
-    private_dns_zone_ids = [var.postgres_private_dns_zone_id]
+    private_dns_zone_ids = var.private_dns_zone_ids
   }
 
   tags = var.tags

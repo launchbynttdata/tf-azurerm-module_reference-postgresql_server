@@ -1,14 +1,14 @@
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 variable "resource_names_map" {
   description = "A map of key to resource_name that will be used by tf-launch-module_library-resource_name to generate resource names"
@@ -366,11 +366,34 @@ variable "private_dns_zone_group_name" {
   default     = "psql"
 }
 
-variable "private_dns_zone_ids" {
-  type        = list(string)
-  default     = []
+# Used for private endpoint resource creation
+variable "private_endpoint_subnet_id" {
+  description = "Subnet ID for the private endpoint. Used only when enable_private_endpoint is true."
+  type        = string
+  default     = ""
+  validation {
+    condition     = var.enable_private_endpoint ? length(var.private_endpoint_subnet_id) > 0 : true
+    error_message = "private_endpoint_subnet_id must be provided when enable_private_endpoint is true."
+  }
 }
 
+# Used for private endpoint DNS zone group
+variable "private_dns_zone_ids" {
+  description = "List of private DNS zone IDs for PostgreSQL. Used only when enable_private_endpoint is true."
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = var.enable_private_endpoint ? length(var.private_dns_zone_ids) > 0 : true
+    error_message = "private_dns_zone_ids must be provided when enable_private_endpoint is true."
+  }
+}
+
+# Used for module-based DNS zone creation
+variable "private_dns_zone_suffixes" {
+  description = "A set of private DNS zones to create (used for DNS zone module, not for private endpoint resource)."
+  type        = set(string)
+  default     = []
+}
 
 variable "is_manual_connection" {
   description = <<EOT
@@ -388,10 +411,4 @@ variable "subresource_names" {
   EOT
   type        = list(string)
   default     = ["psql"]
-}
-
-variable "private_dns_zone_suffixes" {
-  description = "A set of private DNS zones to create"
-  type        = set(string)
-  default     = []
 }

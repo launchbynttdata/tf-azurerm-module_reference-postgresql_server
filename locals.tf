@@ -12,8 +12,8 @@
 
 locals {
   resource_group_name             = module.resource_names["resource_group"].standard
-  endpoint_name                   = module.resource_names["private_endpoint"].standard
-  private_service_connection_name = module.resource_names["private_service_connection"].standard
+  endpoint_name                   = "psql-endpoint"
+  private_service_connection_name = "psql-service-connection"
 
   default_tags = {
     "provisioner" = "terraform"

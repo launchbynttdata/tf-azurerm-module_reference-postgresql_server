@@ -57,7 +57,7 @@ output "postgresql_server_id" {
   description = "ID of the PostgreSQL Server"
   value       = module.postgresql_server.id
 }
-# output "private_endpoint_id" {
-#   description = "ID of the Private Endpoint"
-#   value       = try(module.private_endpoint[0].id, "")
-# }
+output "private_endpoint_id" {
+  description = "ID of the Private Endpoint"
+  value       = try(module.private_endpoint[0].id, "")
+}

@@ -58,7 +58,7 @@ module "postgresql_server" {
   administrator_password = var.administrator_password
 
   delegated_subnet_id           = var.delegated_subnet_id
-  private_dns_zone_id           = var.private_dns_zone_id
+  private_dns_zone_id           = var.postgres_private_dns_zone_id
   public_network_access_enabled = var.public_network_access_enabled
 
   high_availability = var.high_availability
@@ -137,4 +137,46 @@ module "private_dns_zones" {
 
 
   depends_on = [module.resource_group]
+}
+
+variable "enable_private_endpoint" {
+  description = "Enable private endpoint for PostgreSQL server"
+  type        = bool
+  default     = false
+}
+
+variable "private_endpoint_subnet_id" {
+  description = "Subnet ID for private endpoint"
+  type        = string
+  default     = ""
+}
+
+variable "postgres_private_dns_zone_id" {
+  description = "ID of the private DNS zone for PostgreSQL"
+  type        = string
+  default     = ""
+}
+
+resource "azurerm_private_endpoint" "postgresql" {
+  count               = var.enable_private_endpoint ? 1 : 0
+  name                = "${module.resource_names["postgresql_server"].standard}-pe"
+  location            = var.location
+  resource_group_name = module.resource_group.name
+  subnet_id           = var.private_endpoint_subnet_id
+
+  private_service_connection {
+    name                           = "${module.resource_names["postgresql_server"].standard}-psc"
+    private_connection_resource_id = module.postgresql_server.id
+    subresource_names              = ["postgresqlServer"]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = "default"
+    private_dns_zone_ids = [var.postgres_private_dns_zone_id]
+  }
+
+  tags = var.tags
+
+  depends_on = [module.postgresql_server]
 }

@@ -389,3 +389,9 @@ variable "subresource_names" {
   type        = list(string)
   default     = ["psql"]
 }
+
+variable "private_dns_zone_suffixes" {
+  description = "A set of private DNS zones to create"
+  type        = set(string)
+  default     = []
+}

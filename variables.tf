@@ -371,6 +371,13 @@ variable "private_dns_zone_group_name" {
   default     = "psql"
 }
 
+variable "dns_zone_group_name" { type = string, default = "postgresql" }
+
+variable "endpoint_name"       { type = string, default = "pe-postgresql" }
+
+variable "psc_name"            { type = string, default = "psc-postgresql" }
+variable "postgres_server_id"  { type = string }
+
 # Used for private endpoint resource creation
 variable "private_endpoint_subnet_id" {
   description = "Subnet ID for the private endpoint"
@@ -432,4 +439,3 @@ variable "private_dns_zone_ids" {
     error_message = "private_dns_zone_ids must be provided when enable_private_endpoint is true."
   }
 }
-

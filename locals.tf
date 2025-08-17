@@ -15,6 +15,7 @@ locals {
   resource_group_name             = module.resource_names["resource_group"].standard
   endpoint_name                   = "psql-endpoint"
   private_service_connection_name = "psql-service-connection"
+  subresource_names                = ["postgresqlServer"]
 
   # Default tags applied to all resources
   default_tags = {

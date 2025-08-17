@@ -194,3 +194,13 @@ resource "azurerm_private_endpoint" "postgres" {
 
   depends_on = [module.postgresql_server]
 }
+
+resource "azurerm_private_dns_zone_group" "postgres" {
+  name                = var.dns_zone_group_name
+  private_endpoint_id = azurerm_private_endpoint.postgres.id
+
+  private_dns_zone_configs {
+    name               = "postgresql"
+    private_dns_zone_id = var.private_dns_zone_id
+  }
+}

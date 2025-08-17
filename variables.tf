@@ -417,3 +417,13 @@ variable "subresource_names" {
   type        = list(string)
   default     = ["psql"]
 }
+
+variable "enable_private_endpoint" {
+  type    = bool
+  default = false
+}
+
+variable "postgres_private_dns_zone_id" {
+  type        = string
+  description = "Private DNS Zone ID for Postgres from sharedsvc-network"
+}

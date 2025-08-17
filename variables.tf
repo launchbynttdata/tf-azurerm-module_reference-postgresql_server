@@ -147,6 +147,11 @@ variable "delegated_subnet_id" {
   default     = null
 }
 
+variable "private_endpoint_enabled" {
+  type    = bool
+  default = false
+}
+
 variable "private_dns_zone_id" {
   description = "The ID of the private DNS zone. Required when `delegated_subnet_id` is set"
   type        = string

@@ -173,21 +173,21 @@ variable "private_dns_zone_ids" {
 
 resource "azurerm_private_endpoint" "postgresql" {
   count               = var.enable_private_endpoint ? 1 : 0
-  name                = "${module.resource_names["postgresql_server"].standard}-pe"
+  name                = "${var.name}-pe"
   location            = var.location
   resource_group_name = module.resource_group.name
-  subnet_id           = var.private_endpoint_subnet_id
+  subnet_id           = var.subnet_id
 
   private_service_connection {
-    name                           = "${module.resource_names["postgresql_server"].standard}-psc"
-    private_connection_resource_id = module.postgresql_server.id
+    name                           = "${var.name}-psc"
+    private_connection_resource_id = mazurerm_postgresql_flexible_server.postgres.id
     subresource_names              = ["postgresqlServer"]
     is_manual_connection           = false
   }
 
   private_dns_zone_group {
-    name                 = "default"
-    private_dns_zone_ids = var.private_dns_zone_ids
+    name                 = "dpostgresql-dns-zone-group"
+    private_dns_zone_ids = [var.private_dns_zone_id]
   }
 
   tags = var.tags

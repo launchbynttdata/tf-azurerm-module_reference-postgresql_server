@@ -373,7 +373,7 @@ variable "private_dns_zone_group_name" {
 
 # Used for private endpoint resource creation
 variable "private_endpoint_subnet_id" {
-  description = "Subnet ID for the private endpoint. Used only when enable_private_endpoint is true."
+  description = "Subnet ID for the private endpoint"
   type        = string
   default     = ""
   validation {
@@ -423,7 +423,13 @@ variable "enable_private_endpoint" {
   default = false
 }
 
-variable "postgres_private_dns_zone_id" {
-  type        = string
-  description = "Private DNS Zone ID for Postgres from sharedsvc-network"
+variable "private_dns_zone_ids" {
+  description = "List of private DNS zone IDs for PostgreSQL (used by private endpoint)"
+  type        = list(string)
+  default     = []
+  validation {
+    condition     = var.enable_private_endpoint ? length(var.private_dns_zone_ids) > 0 : true
+    error_message = "private_dns_zone_ids must be provided when enable_private_endpoint is true."
+  }
 }
+

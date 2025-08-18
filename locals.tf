@@ -13,22 +13,15 @@
 # Local values for resource names and tags
 locals {
   resource_group_name             = module.resource_names["resource_group"].standard
-  endpoint_name                   = "psql-endpoint"
-  private_service_connection_name = "psql-service-connection"
-  subresource_names                = ["postgresqlServer"]
-
-  # Default tags applied to all resources
-  default_tags = {
+  endpoint_name                   = module.resource_names["private_endpoint"].standard
+  private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
+  private_service_connection_name = module.resource_names["private_service_connection"].standard
+  
+    default_tags = {
     "provisioner" = "terraform"
   }
-  
-  # Tags for resource group (resource_name, default_tags, user tags)
-  resource_group_tags   = merge({ resource_name = local.resource_group_name }, local.default_tags, var.tags)
-  # Tags for private endpoint (resource_name, default_tags, user tags)
-  private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
 
-  resource_group = {
-    name     = local.resource_group_name
-    location = var.location
-  }
+  # subresource_names                = ["postgresqlServer"]
 }
+
+ 

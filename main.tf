@@ -1,14 +1,15 @@
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 module "resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
@@ -44,7 +45,7 @@ module "postgresql_server" {
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name
   location            = var.location
-  
+
   create_mode      = var.create_mode
   postgres_version = var.postgres_version
   sku_name         = var.sku_name
@@ -58,7 +59,7 @@ module "postgresql_server" {
   administrator_password = var.administrator_password
 
   delegated_subnet_id           = var.delegated_subnet_id
-  private_dns_zone_id           = var.postgres_private_dns_zone_id
+  private_dns_zone_id           = var.private_dns_zone_id
   public_network_access_enabled = var.public_network_access_enabled
 
   high_availability = var.high_availability
@@ -113,94 +114,13 @@ module "private_endpoint" {
   region                          = var.location
   subnet_id                       = var.subnet_id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
-  private_dns_zone_ids            = var.private_dns_zone_suffixes
+  private_dns_zone_ids            = var.private_dns_zone_ids
   is_manual_connection            = var.is_manual_connection
-  private_connection_resource_id  = module.postgresql_server.id
+  # private_connection_resource_id  = var.key_vault_id
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags
   private_service_connection_name = local.private_service_connection_name
 
-  depends_on = [module.postgresql_server]
-}
-
-module "private_dns_zones" {
-  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm"
-  version = "~> 1.0"
-
-  for_each = var.private_dns_zone_suffixes
-
-  zone_name           = each.key
-  resource_group_name = module.resource_group.name
-
-  tags = var.tags
-
-
-  depends_on = [module.resource_group]
-}
-
-variable "enable_private_endpoint" {
-  description = "Enable private endpoint for PostgreSQL server"
-  type        = bool
-  default     = false
-}
-
-variable "private_endpoint_subnet_id" {
-  description = "Subnet ID for the private endpoint"
-  type        = string
-  default     = ""
-  validation {
-    condition     = length(var.private_endpoint_subnet_id) > 0
-    error_message = "private_endpoint_subnet_id must be provided when enable_private_endpoint is true."
-  }
-}
-
-variable "postgres_private_dns_zone_id" {
-  description = "ID of the private DNS zone for PostgreSQL"
-  type        = string
-  default     = ""
-}
-
-variable "private_dns_zone_ids" {
-  description = "List of private DNS zone IDs for PostgreSQL"
-  type        = list(string)
-  default     = []
-  validation {
-    condition     = var.enable_private_endpoint ? length(var.private_dns_zone_ids) > 0 : true
-    error_message = "private_dns_zone_ids must be provided when enable_private_endpoint is true."
-  }
-}
-
-resource "azurerm_private_endpoint" "postgres" {
-  count               = var.enable_private_endpoint ? 1 : 0
-  name                = "${module.resource_names["postgresql_server"].standard}-pe"
-  location            = module.resource_group.location
-  resource_group_name = module.resource_group.name
-  subnet_id           = var.private_endpoint_subnet_id
-
-  private_service_connection {
-    name                           = "${module.resource_names["postgresql_server"].standard}-psc"
-    private_connection_resource_id = module.postgresql_server.id
-    subresource_names              = ["postgresqlServer"]
-    is_manual_connection           = false
-  }
-
-  private_dns_zone_group {
-    name                 = "postgres-dns-group"
-    private_dns_zone_ids = var.private_dns_zone_ids
-  }
-
-  tags = var.tags
-
-  depends_on = [module.postgresql_server]
-}
-
-resource "azurerm_private_dns_zone_group" "postgres" {
-  name                = var.dns_zone_group_name
-  private_endpoint_id = azurerm_private_endpoint.postgres.id
-
-  private_dns_zone_configs {
-    name               = "postgresql"
-    private_dns_zone_id = var.private_dns_zone_id
-  }
+  # depends_on = [module.postgresql_server]
 }

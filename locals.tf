@@ -21,6 +21,8 @@ locals {
     "provisioner" = "terraform"
   }
 
+  
+
   # subresource_names                = ["postgresqlServer"]
 }
 

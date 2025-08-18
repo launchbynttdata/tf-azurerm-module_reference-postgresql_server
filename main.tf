@@ -122,5 +122,5 @@ module "private_endpoint" {
   tags                            = local.private_endpoint_tags
   private_service_connection_name = local.private_service_connection_name
 
-  # depends_on = [module.postgresql_server]
+  depends_on = [module.postgresql_server]
 }

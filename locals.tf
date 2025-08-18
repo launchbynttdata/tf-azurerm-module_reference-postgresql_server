@@ -16,7 +16,9 @@ locals {
   resource_group_name             = module.resource_names["resource_group"].standard
   endpoint_name                   = "hygtmp-sandbox-004-neu-postgresql-001"
   private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
-  private_service_connection_name = "hygtmp-sandbox-004-neu-postgresql-001-psc"
+  endpoint_name                   = var.endpoint_name
+  private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
+  private_service_connection_name = "${local.endpoint_name}-psc"
     default_tags = {
     "provisioner" = "terraform"
   }

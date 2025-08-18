@@ -116,7 +116,7 @@ module "private_endpoint" {
   private_dns_zone_group_name     = var.private_dns_zone_group_name
   private_dns_zone_ids            = var.private_dns_zone_ids
   is_manual_connection            = var.is_manual_connection
-  # private_connection_resource_id  = var.key_vault_id
+  private_connection_resource_id  = module.postgresql_server.id
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags

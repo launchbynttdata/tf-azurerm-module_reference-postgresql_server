@@ -32,7 +32,7 @@ module "resource_group" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm"
   version = "~> 1.0"
 
-  name     = "hygtmp-sandbox-004-neu-postgresql-001-rg"
+  name     = module.resource_names["resource_group"].standard
   location = var.location
 
   tags = merge(var.tags, { resource_name = module.resource_names["resource_group"].standard })

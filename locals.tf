@@ -21,7 +21,11 @@ locals {
   private_service_connection_name = "${local.endpoint_name}-psc"
     default_tags = {
     "provisioner" = "terraform"
+  default_tags = {
+    "provisioner" = "terraform"
   }
+  private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
+  private_service_connection_name = "hygtmp-sandbox-004-neu-postgresql-001-psc"
 }
 
  

@@ -115,11 +115,14 @@ module "private_endpoint" {
   private_dns_zone_group_name     = var.private_dns_zone_group_name
   private_dns_zone_ids            = var.private_dns_zone_ids
   is_manual_connection            = var.is_manual_connection
-  private_connection_resource_id  = module.postgresql_server.id
+  # private_connection_resource_id  = module.postgresql_server.id
+  private_connection_resource_id  = var.private_connection_resource_id
+
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags
   private_service_connection_name = local.private_service_connection_name
 
+  # Do NOT set private_connection_resource_alias at all
   # depends_on = [module.postgresql_server]
 }

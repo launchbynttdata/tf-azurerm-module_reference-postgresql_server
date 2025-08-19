@@ -53,3 +53,7 @@ output "source_server_id" {
 output "server_configuration" {
   value = { for config in module.postgresql_server_configuration : config.name => config.value }
 }
+
+output "postgresql_server_id" {
+  value = module.postgresql_server.id
+}

@@ -390,3 +390,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "private_connection_resource_id" {
+  type = string
+  description = "The resource ID for the private endpoint connection."
+}

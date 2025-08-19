@@ -125,3 +125,4 @@ module "private_endpoint" {
   # Do NOT set private_connection_resource_alias at all
   # depends_on = [module.postgresql_server]
 }
+

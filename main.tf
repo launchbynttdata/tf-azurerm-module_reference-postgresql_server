@@ -117,7 +117,6 @@ module "private_endpoint" {
   is_manual_connection            = var.is_manual_connection
   # private_connection_resource_id  = module.postgresql_server.id
   private_connection_resource_id  = var.private_connection_resource_id
-
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags

@@ -23,6 +23,7 @@
 # }
 
 
+
 locals {
   # resource_group_name             = module.resource_names["resource_group"].standard
   # key_vault_name                  = var.key_vault_name != null ? var.key_vault_name : module.resource_names["key_vault"].minimal_random_suffix_without_any_separators

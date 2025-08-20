@@ -41,4 +41,3 @@ locals {
     location = var.location
   }
 }
-# hygtmp-database-neu-sbox-001-rg-001

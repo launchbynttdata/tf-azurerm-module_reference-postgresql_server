@@ -11,15 +11,15 @@
 # limitations under the License.
 
 
-# Local values for resource names and tags
-locals {
-  resource_group_name             = module.resource_names["resource_group"].standard
-  endpoint_name                   = "hygtmp-sandbox-004-neu-postgresql-001"
-  private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
-  private_service_connection_name = "hygtmp-sandbox-004-neu-postgresql-001-psc"
-    default_tags = {
-    "provisioner" = "terraform"
-  }
-}
+# # Local values for resource names and tags
+# locals {
+#   resource_group_name             = module.resource_names["resource_group"].standard
+#   endpoint_name                   = "hygtmp-sandbox-004-neu-postgresql-001"
+#   private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
+#   private_service_connection_name = "hygtmp-sandbox-004-neu-postgresql-001-psc"
+#     default_tags = {
+#     "provisioner" = "terraform"
+#   }
+# }
 
  

@@ -177,6 +177,7 @@ variable "is_manual_connection" {
   default     = false
 }
 
+
 variable "subresource_names" {
   description = <<EOT
     A list of subresource names which the Private Endpoint is able to connect to. subresource_names corresponds to group_id.

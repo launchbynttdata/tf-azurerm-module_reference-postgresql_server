@@ -198,10 +198,10 @@ variable "request_message" {
   default     = ""
 }
 
-variable "private_dns_zone_id" {
-  description = "The ID of the private DNS zone. Required when `delegated_subnet_id` is set"
-  type        = string
-  default     = null
+variable "private_dns_zone_ids" {
+  description = "The IDs of the private DNS zones. Required when `delegated_subnet_id` is set"
+  type        = list(string)
+  default     = []
 }
 
 variable "public_network_access_enabled" {

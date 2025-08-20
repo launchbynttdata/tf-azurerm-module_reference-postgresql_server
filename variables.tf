@@ -375,6 +375,18 @@ variable "storage_mb" {
   }
 }
 
+variable "endpoint_name" {
+  description = "The name of the private endpoint."
+  type        = string
+  default     = null
+}
+
+variable "private_service_connection_name" {
+  description = "The name of the private service connection."
+  type        = string
+  default     = null
+}
+
 variable "storage_tier" {
   description = "The storage tier of the Postgres Flexible Server. Default value based on `storage_mb`"
   type        = string
@@ -384,6 +396,11 @@ variable "storage_tier" {
     condition     = var.storage_tier == null || can(regex("^(P4|P6|P10|P15|P20|P30|P40|P50|P60|P70|P80)$", var.storage_tier))
     error_message = "Invalid storage_tier value"
   }
+}
+variable "resource_group_name" {
+  description = "The name of the resource group to use. If not set, a default will be used."
+  type        = string
+  default     = null
 }
 
 variable "tags" {

@@ -185,7 +185,7 @@ variable "subresource_names" {
     https://docs.microsoft.com/azure/private-link/private-endpoint-overview#private-link-resource
   EOT
   type        = list(string)
-  default     = ["vault"]
+  default     = ["postgresqlServer"]
 }
 
 variable "request_message" {

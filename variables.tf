@@ -403,6 +403,12 @@ variable "resource_group_name" {
   default     = null
 }
 
+variable "resource_name" {
+  description = "The name of the resource name to use. If not set, a default will be used."
+  type        = string
+  default     = null
+}
+
 variable "tags" {
   description = "A mapping of tags to assign to the resource."
   type        = map(string)

@@ -42,3 +42,4 @@ locals {
     location = var.location
   }
 }
+

@@ -30,7 +30,8 @@ locals {
   # endpoint_name                   = var.endpoint_name != null ? var.endpoint_name : module.resource_names["private_endpoint"].standard
   # private_service_connection_name = var.private_service_connection_name != null ? var.private_service_connection_name : module.resource_names["private_service_connection"].standard
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : module.resource_names["resource_group"].standard
-  endpoint_name                   = module.resource_names["private_link"].standard
+  endpoint_name                   = module.resource_names["private_endpoint"].standard
+  private_service_connection_name = module.resource_names["private_service_connection"].standard
   default_tags = {
     "provisioner" = "terraform"
   }

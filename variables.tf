@@ -415,7 +415,7 @@ variable "tags" {
   default     = {}
 }
 
-variable "private_connection_resource_id" {
-  type = string
-  description = "The resource ID for the private endpoint connection."
-}
+# variable "private_connection_resource_id" {
+#   type = string
+#   description = "The resource ID for the private endpoint connection."
+# }

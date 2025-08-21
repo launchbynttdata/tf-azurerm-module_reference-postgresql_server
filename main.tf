@@ -108,8 +108,10 @@ module "private_endpoint" {
 
   count = var.public_network_access_enabled ? 0 : 1
 
-  endpoint_name                   = local.endpoint_name
-  resource_group_name             = local.resource_group_name
+  # endpoint_name                   = local.endpoint_name
+  endpoint_name                   = module.resource_names["private_endpoint"].standard
+  # resource_group_name             = local.resource_group_name
+  resource_group_name  = module.resource_names["resource_group"].standard
   region                          = var.location
   subnet_id                       = var.subnet_id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
@@ -119,9 +121,9 @@ module "private_endpoint" {
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags
-  private_service_connection_name = local.private_service_connection_name
+  private_service_connection_name = module.resource_names["private_service_connection"].standard
+  # resource_name                   = module.resource_names["private_endpoint"].standard
 
   # Do NOT set private_connection_resource_alias at all
   # depends_on = [module.postgresql_server]
 }
-

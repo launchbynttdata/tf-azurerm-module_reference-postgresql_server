@@ -159,7 +159,7 @@ variable "private_dns_zone_group_name" {
   description = "Specifies the Name of the Private DNS Zone Group."
   type        = string
   default     = "vault"
-}
+ }
 
 
 variable "private_dns_zone_ids" {

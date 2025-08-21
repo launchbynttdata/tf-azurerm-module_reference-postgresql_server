@@ -121,7 +121,7 @@ module "private_endpoint" {
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags
-  private_service_connection_name = module.resource_names["private_service_connection"].standard
+  private_service_connection_name = module.resource_names["private_link"].standard
   # resource_name                   = module.resource_names["private_endpoint"].standard
 
   # Do NOT set private_connection_resource_alias at all

@@ -26,6 +26,18 @@ output "resource_group_name" {
   value = module.resource_group.name
 }
 
+output "resource_names" {
+  value = {
+    resource_group = {
+      standard = local.resource_group_name
+    }
+    private_link = {
+      standard = module.postgresql_server.private_link_name
+    }
+  }
+}
+
+
 output "admin_tenant_id" {
   value = module.postgresql_server_ad_administrator[0].tenant_id
 }

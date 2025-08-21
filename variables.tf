@@ -162,10 +162,10 @@ variable "private_dns_zone_group_name" {
  }
 
 
-variable "private_dns_zone_id" {
+variable "private_dns_zone_ids" {
   description = "A list of Private DNS Zone IDs to link with the Private Endpoint."
-  type        = string
-  default     = ""
+  type        = list(string)
+  default     = []
 }
 
 variable "is_manual_connection" {

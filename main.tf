@@ -110,8 +110,8 @@ module "private_endpoint" {
 
   # endpoint_name                   = local.endpoint_name
   endpoint_name                   = module.resource_names["private_endpoint"].standard
-  resource_group_name             = local.resource_group_name
-  # resource_group_name  = module.resource_names["resource_group"].standard
+  # resource_group_name             = local.resource_group_name
+  resource_group_name  = module.resource_names["resource_group"].standard
   region                          = var.location
   subnet_id                       = var.subnet_id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
@@ -127,3 +127,4 @@ module "private_endpoint" {
   # Do NOT set private_connection_resource_alias at all
   # depends_on = [module.postgresql_server]
 }
+

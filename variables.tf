@@ -164,8 +164,7 @@ variable "private_dns_zone_group_name" {
 
 variable "private_dns_zone_ids" {
   description = "A list of Private DNS Zone IDs to link with the Private Endpoint."
-  type        = list(string)
-  default     = []
+  type        = string
 }
 
 variable "is_manual_connection" {

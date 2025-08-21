@@ -42,10 +42,6 @@ output "delegated_subnet_id" {
   value = module.postgresql_server.delegated_subnet_id
 }
 
-output "private_dns_zone_ids" {
-  value = module.postgresql_server.private_dns_zone_ids
-}
-
 output "source_server_id" {
   value = module.postgresql_server.source_server_id
 }

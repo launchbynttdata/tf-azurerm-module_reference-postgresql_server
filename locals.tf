@@ -14,7 +14,7 @@
 # # Local values for resource names and tags
 # locals {
 #   resource_group_name             = module.resource_names["resource_group"].standard
-#   endpoint_name                   = module.resource_names["private_endpoint"].standard
+# endpoint_name                   = module.resource_names["private_endpoint"].standard
 #   private_endpoint_tags = merge({ resource_name = local.endpoint_name }, local.default_tags, var.tags)
 #   private_service_connection_name = module.resource_names["private_service_connection"].standard
 #     default_tags = {
@@ -27,9 +27,10 @@
 locals {
   # resource_group_name             = module.resource_names["resource_group"].standard
   # key_vault_name                  = var.key_vault_name != null ? var.key_vault_name : module.resource_names["key_vault"].minimal_random_suffix_without_any_separators
-  endpoint_name                   = var.endpoint_name != null ? var.endpoint_name : module.resource_names["private_endpoint"].standard
+  # endpoint_name                   = var.endpoint_name != null ? var.endpoint_name : module.resource_names["private_endpoint"].standard
   # private_service_connection_name = var.private_service_connection_name != null ? var.private_service_connection_name : module.resource_names["private_service_connection"].standard
   resource_group_name = var.resource_group_name != null ? var.resource_group_name : module.resource_names["resource_group"].standard
+  endpoint_name                   = module.resource_names["private_endpoint"].standard
   default_tags = {
     "provisioner" = "terraform"
   }

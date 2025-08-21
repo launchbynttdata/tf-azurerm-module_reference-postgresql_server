@@ -108,8 +108,8 @@ module "private_endpoint" {
 
   count = var.public_network_access_enabled ? 0 : 1
 
-  # endpoint_name                   = local.endpoint_name
-  endpoint_name                   = module.resource_names["private_endpoint"].standard
+  endpoint_name                   = local.endpoint_name
+  # endpoint_name                   = module.resource_names["private_endpoint"].standard
   # resource_group_name             = local.resource_group_name
   resource_group_name  = module.resource_names["resource_group"].standard
   region                          = var.location

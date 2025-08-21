@@ -58,7 +58,7 @@ module "postgresql_server" {
   administrator_password = var.administrator_password
 
   delegated_subnet_id           = var.delegated_subnet_id
-  private_dns_zone_id           = var.private_dns_zone_ids[0]
+  private_dns_zone_ids           = var.private_dns_zone_ids
   public_network_access_enabled = var.public_network_access_enabled
 
   high_availability = var.high_availability
@@ -115,7 +115,7 @@ module "private_endpoint" {
   region                          = var.location
   subnet_id                       = var.subnet_id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
-  private_dns_zone_ids            = var.private_dns_zone_ids
+  # private_dns_zone_ids            = var.private_dns_zone_ids
   is_manual_connection            = var.is_manual_connection
   private_connection_resource_id  = module.postgresql_server.id
   subresource_names               = var.subresource_names

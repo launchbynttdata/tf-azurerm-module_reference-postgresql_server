@@ -81,7 +81,7 @@ module "postgresql_server_configuration" {
   for_each = var.server_configuration
 
   postgresql_server_id = module.postgresql_server.id
-
+  
   configuration_key   = each.key
   configuration_value = each.value
 }
@@ -121,3 +121,7 @@ module "private_endpoint" {
   tags                            = local.private_endpoint_tags
   private_service_connection_name = module.resource_names["private_service_connection"].standard
 }
+
+// In your server_configuration map, remove these if PgBouncer is not enabled:
+// "pgbouncer.max_prepared_statements" = "..."
+// "pgbouncer.ignore_startup_parameters" = "..."

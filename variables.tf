@@ -146,7 +146,12 @@ variable "postgres_version" {
 variable "server_configuration" {
   description = "Map of configurations to apply to the postgres flexible server"
   type        = map(string)
-  default     = {}
+  default     = {
+    # Remove PgBouncer keys unless PgBouncer is enabled
+    # "pgbouncer.max_prepared_statements" = "..."
+    # "pgbouncer.ignore_startup_parameters" = "..."
+    # other configs...
+  }
 }
 
 variable "delegated_subnet_id" {

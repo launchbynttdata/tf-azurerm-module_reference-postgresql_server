@@ -168,6 +168,12 @@ variable "private_dns_zone_ids" {
   default     = []
 }
 
+variable "private_dns_zone_id" {
+  description = "The ID of the private DNS zone. Required when `delegated_subnet_id` is set"
+  type        = string
+  default     = null
+}
+
 variable "is_manual_connection" {
   description = <<EOT
     Does the Private Endpoint require Manual Approval from the remote resource owner? Changing this forces a new resource

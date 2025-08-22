@@ -26,6 +26,14 @@ variable "resource_names_map" {
       name       = "rg"
       max_length = 60
     }
+    private_endpoint = {
+      name       = "pe"
+      max_length = 60
+    }
+    private_service_connection = {
+      name       = "psc"
+      max_length = 60
+    }
   }
 }
 

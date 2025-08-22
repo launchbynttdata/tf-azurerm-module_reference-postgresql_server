@@ -45,31 +45,31 @@ module "postgresql_server" {
   resource_group_name = module.resource_group.name
   location            = var.location
 
-  create_mode      = var.create_mode
-  postgres_version = var.postgres_version
-  sku_name         = var.sku_name
-  storage_mb       = var.storage_mb
-  storage_tier     = var.storage_tier
+  create_mode         = var.create_mode
+  postgres_version    = var.postgres_version
+  sku_name            = var.sku_name
+  storage_mb          = var.storage_mb
+  storage_tier        = var.storage_tier
 
-  identity_ids = var.identity_ids
+  identity_ids        = var.identity_ids
 
-  authentication         = var.authentication
-  administrator_login    = var.administrator_login
+  authentication      = var.authentication
+  administrator_login = var.administrator_login
   administrator_password = var.administrator_password
 
   delegated_subnet_id           = var.delegated_subnet_id
   private_dns_zone_id           = var.private_dns_zone_id
   public_network_access_enabled = var.public_network_access_enabled
 
-  high_availability = var.high_availability
+  high_availability             = var.high_availability
 
-  backup_retention_days        = var.backup_retention_days
-  geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
+  backup_retention_days         = var.backup_retention_days
+  geo_redundant_backup_enabled  = var.geo_redundant_backup_enabled
 
-  maintenance_window = var.maintenance_window
+  maintenance_window            = var.maintenance_window
 
-  source_server_id = var.source_server_id
-  zone             = var.zone
+  source_server_id              = var.source_server_id
+  zone                         = var.zone
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 }
@@ -95,11 +95,11 @@ module "postgresql_server_ad_administrator" {
   postgresql_server_name = module.postgresql_server.name
   resource_group_name    = module.resource_group.name
 
-  tenant_id = var.ad_administrator.tenant_id
-  object_id = var.ad_administrator.object_id
+  tenant_id              = var.ad_administrator.tenant_id
+  object_id              = var.ad_administrator.object_id
 
-  principal_name = var.ad_administrator.principal_name
-  principal_type = var.ad_administrator.principal_type
+  principal_name         = var.ad_administrator.principal_name
+  principal_type         = var.ad_administrator.principal_type
 }
 
 module "private_endpoint" {
@@ -109,22 +109,15 @@ module "private_endpoint" {
   count = var.public_network_access_enabled ? 0 : 1
 
   endpoint_name                   = local.endpoint_name
-  # endpoint_name                   = module.resource_names["private_endpoint"].standard
-  # resource_group_name             = local.resource_group_name
-  resource_group_name  = module.resource_names["resource_group"].standard
+  resource_group_name             = module.resource_names["resource_group"].standard
   region                          = var.location
   subnet_id                       = var.subnet_id
   private_dns_zone_group_name     = var.private_dns_zone_group_name
-  private_dns_zone_ids             = var.private_dns_zone_ids[0]
+  private_dns_zone_ids            = [var.private_dns_zone_id]
   is_manual_connection            = var.is_manual_connection
   private_connection_resource_id  = module.postgresql_server.id
   subresource_names               = var.subresource_names
   request_message                 = var.request_message
   tags                            = local.private_endpoint_tags
   private_service_connection_name = module.resource_names["private_service_connection"].standard
-  # resource_name                   = module.resource_names["private_endpoint"].standard
-
-  # Do NOT set private_connection_resource_alias at all
-  # depends_on = [module.postgresql_server]
 }
-

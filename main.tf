@@ -27,23 +27,6 @@ module "resource_names" {
   use_azure_region_abbr   = var.use_azure_region_abbr
 }
 
-module "resource_names" {
-  source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 2.0"
-
-  for_each = var.resource_names_map
-
-  region                  = join("", split("-", var.location))
-  class_env               = var.environment
-  cloud_resource_type     = each.value.name
-  instance_env            = var.environment_number
-  instance_resource       = var.resource_number
-  maximum_length          = each.value.max_length
-  logical_product_family  = var.logical_product_family
-  logical_product_service = var.logical_product_service
-  use_azure_region_abbr   = var.use_azure_region_abbr
-}
-
 module "resource_group" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm"
   version = "~> 1.0"

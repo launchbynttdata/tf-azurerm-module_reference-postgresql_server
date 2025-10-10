@@ -22,6 +22,14 @@ variable "resource_names_map" {
       name       = "psql"
       max_length = 60
     }
+    private_endpoint = {
+      name       = "pe"
+      max_length = 80
+    }
+    private_service_connection = {
+      name       = "pesc"
+      max_length = 80
+    }
     resource_group = {
       name       = "rg"
       max_length = 60
@@ -339,4 +347,59 @@ variable "tags" {
   description = "A mapping of tags to assign to the resource."
   type        = map(string)
   default     = {}
+}
+
+variable "create_private_endpoint" {
+  description = "Whether or not to create a Private Endpoint for the Postgres Flexible Server"
+  type        = bool
+  default     = false
+}
+
+variable "private_endpoint_subnet_id" {
+  description = "The ID of the subnet to which the Postgres Flexible Server private endpoint is connected"
+  type        = string
+  default     = null
+}
+
+variable "private_endpoint_dns_zone_ids" {
+  description = "A list of Private DNS Zone IDs to link with the Private Endpoint."
+  type        = list(string)
+  default     = []
+}
+
+# https://learn.microsoft.com/en-us/azure/private-link/private-endpoint-dns
+variable "private_endpoint_dns_zone_group_name" {
+  description = "Specifies the Name of the Private DNS Zone Group."
+  type        = string
+  default     = "postgresqlServer"
+}
+
+variable "private_endpoint_is_manual_connection" {
+  description = <<EOT
+    Does the Private Endpoint require Manual Approval from the remote resource owner? Changing this forces a new resource
+    to be created.
+  EOT
+  type        = bool
+  default     = false
+}
+
+
+variable "private_endpoint_subresource_names" {
+  description = <<EOT
+    A list of subresource names which the Private Endpoint is able to connect to. subresource_names corresponds to group_id.
+    Possible values are detailed in the product documentation in the Subresources column.
+    https://docs.microsoft.com/azure/private-link/private-endpoint-overview#private-link-resource
+  EOT
+  type        = list(string)
+  default     = ["postgresqlServer"]
+}
+
+variable "private_endpoint_request_message" {
+  description = <<EOT
+    A message passed to the owner of the remote resource when the private endpoint attempts to establish the connection
+    to the remote resource. The request message can be a maximum of 140 characters in length.
+    Only valid if `is_manual_connection=true`
+  EOT
+  type        = string
+  default     = ""
 }

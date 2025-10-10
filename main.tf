@@ -72,6 +72,8 @@ module "postgresql_server" {
   zone             = var.zone
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
+
+  depends_on = [module.resource_group]
 }
 
 module "postgresql_server_configuration" {
@@ -84,6 +86,8 @@ module "postgresql_server_configuration" {
 
   configuration_key   = each.key
   configuration_value = each.value
+
+  depends_on = [module.postgresql_server]
 }
 
 module "postgresql_server_ad_administrator" {
@@ -100,4 +104,29 @@ module "postgresql_server_ad_administrator" {
 
   principal_name = var.ad_administrator.principal_name
   principal_type = var.ad_administrator.principal_type
+
+  depends_on = [module.postgresql_server]
+}
+
+module "private_endpoint" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm"
+  version = "~> 1.0"
+
+  count = var.create_private_endpoint ? 1 : 0
+
+  endpoint_name                   = module.resource_names["private_endpoint"].standard
+  resource_group_name             = module.resource_group.name
+  region                          = var.location
+  subnet_id                       = var.private_endpoint_subnet_id
+  private_dns_zone_group_name     = var.private_endpoint_dns_zone_group_name
+  private_dns_zone_ids            = var.private_endpoint_dns_zone_ids
+  is_manual_connection            = var.private_endpoint_is_manual_connection
+  private_connection_resource_id  = module.postgresql_server.id
+  subresource_names               = var.private_endpoint_subresource_names
+  request_message                 = var.private_endpoint_request_message
+  private_service_connection_name = module.resource_names["private_service_connection"].standard
+
+  tags = merge(var.tags, { resource_name = module.resource_names["private_endpoint"].standard })
+
+  depends_on = [module.postgresql_server]
 }

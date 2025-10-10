@@ -92,7 +92,7 @@ variable "logical_product_service" {
     error_message = "The variable must contain letters, numbers, -, _, and .."
   }
 
-  default = "database"
+  default = "postgresql"
 }
 
 variable "class_env" {
@@ -123,12 +123,6 @@ variable "vnet_address_space" {
   description = "Address space of the example vnet"
   type        = string
   default     = "10.0.200.0/24"
-}
-
-variable "private_dns_zone_name" {
-  description = "Suffix of the private dns zone name"
-  type        = string
-  default     = "launchdso.postgres.database.azure.com"
 }
 
 variable "time_to_wait_after_destroy" {
@@ -351,6 +345,12 @@ variable "storage_tier" {
     condition     = var.storage_tier == null || can(regex("^(P4|P6|P10|P15|P20|P30|P40|P50|P60|P70|P80)$", var.storage_tier))
     error_message = "Invalid storage_tier value"
   }
+}
+
+variable "create_private_endpoint" {
+  description = "Whether or not to create a Private Endpoint for the Postgres Flexible Server"
+  type        = bool
+  default     = true
 }
 
 variable "tags" {

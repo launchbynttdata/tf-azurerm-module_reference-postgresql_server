@@ -1,4 +1,4 @@
-# complete
+# private_endpoint
 
 When running locally without service principal credentials, set `var.use_service_principal` to `false`
 
@@ -28,6 +28,7 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="module_network_resource_group"></a> [network\_resource\_group](#module\_network\_resource\_group) | terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm | ~> 1.0 |
 | <a name="module_virtual_network"></a> [virtual\_network](#module\_virtual\_network) | terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm | ~> 3.0 |
 | <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm | ~> 1.0 |
+| <a name="module_private_dns_zone_vnet_link"></a> [private\_dns\_zone\_vnet\_link](#module\_private\_dns\_zone\_vnet\_link) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_vnet_link/azurerm | ~> 1.0 |
 | <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | ../.. | n/a |
 
 ## Resources
@@ -47,12 +48,11 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Number that represents the instance of the environment. | `number` | `0` | no |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Number that represents the instance of the resource. | `number` | `0` | no |
 | <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
-| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | (Required) Name of the product service for which the resource is created.<br>    For example, backend, frontend, middleware etc. | `string` | `"database"` | no |
+| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | (Required) Name of the product service for which the resource is created.<br>    For example, backend, frontend, middleware etc. | `string` | `"postgresql"` | no |
 | <a name="input_class_env"></a> [class\_env](#input\_class\_env) | (Required) Environment where resource is going to be deployed. For example. dev, qa, uat | `string` | `"dev"` | no |
 | <a name="input_location"></a> [location](#input\_location) | Location of the Postgres Flexible Server | `string` | `"eastus"` | no |
 | <a name="input_use_service_principal"></a> [use\_service\_principal](#input\_use\_service\_principal) | Set to false when running locally without a service principal | `bool` | `true` | no |
 | <a name="input_vnet_address_space"></a> [vnet\_address\_space](#input\_vnet\_address\_space) | Address space of the example vnet | `string` | `"10.0.200.0/24"` | no |
-| <a name="input_private_dns_zone_name"></a> [private\_dns\_zone\_name](#input\_private\_dns\_zone\_name) | Suffix of the private dns zone name | `string` | `"launchdso.postgres.database.azure.com"` | no |
 | <a name="input_time_to_wait_after_destroy"></a> [time\_to\_wait\_after\_destroy](#input\_time\_to\_wait\_after\_destroy) | time to wait before destroying the virtual network | `string` | `"30s"` | no |
 | <a name="input_sku_name"></a> [sku\_name](#input\_sku\_name) | The name of the SKU used by this Postgres Flexible Server | `string` | `"B_Standard_B1ms"` | no |
 | <a name="input_create_mode"></a> [create\_mode](#input\_create\_mode) | The creation mode. Possible values are Default, GeoRestore, PointInTimeRestore, Replica, and Update | `string` | `"Default"` | no |
@@ -72,6 +72,7 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="input_source_server_id"></a> [source\_server\_id](#input\_source\_server\_id) | The ID of the source Postgres Flexible Server to restore from. Required when `create_mode` is GeoRestore, PointInTimeRestore, or Replica | `string` | `null` | no |
 | <a name="input_storage_mb"></a> [storage\_mb](#input\_storage\_mb) | The storage capacity of the Postgres Flexible Server in megabytes | `number` | `32768` | no |
 | <a name="input_storage_tier"></a> [storage\_tier](#input\_storage\_tier) | The storage tier of the Postgres Flexible Server. Default value based on `storage_mb` | `string` | `null` | no |
+| <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Whether or not to create a Private Endpoint for the Postgres Flexible Server | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
 
 ## Outputs

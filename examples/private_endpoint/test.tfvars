@@ -5,7 +5,7 @@ server_configuration = {
 }
 
 # uncomment when running locally without a service principal
-use_service_principal = false
+# use_service_principal = false
 
 create_private_endpoint = true
 

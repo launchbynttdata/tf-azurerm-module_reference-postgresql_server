@@ -5,6 +5,6 @@ server_configuration = {
 }
 
 # uncomment when running locally without a service principal
-use_service_principal = false
+# use_service_principal = false
 
 zone = "1"

@@ -103,7 +103,7 @@ If `make check` target is successful, developer is good to commit the code to pr
 - runs `conftests`. `conftests` make sure `policy` checks are successful.
 - runs `terratest`. This is integration test suit.
 - runs `opa` tests
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -124,6 +124,7 @@ No providers.
 | <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm | ~> 1.0 |
 | <a name="module_postgresql_server_configuration"></a> [postgresql\_server\_configuration](#module\_postgresql\_server\_configuration) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_configuration/azurerm | ~> 1.0 |
 | <a name="module_postgresql_server_ad_administrator"></a> [postgresql\_server\_ad\_administrator](#module\_postgresql\_server\_ad\_administrator) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_ad_administrator/azurerm | ~> 1.0 |
+| <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm | ~> 1.0 |
 
 ## Resources
 
@@ -133,7 +134,7 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br>    name       = string<br>    max_length = optional(number, 60)<br>  }))</pre> | <pre>{<br>  "postgresql_server": {<br>    "max_length": 60,<br>    "name": "psql"<br>  },<br>  "resource_group": {<br>    "max_length": 60,<br>    "name": "rg"<br>  }<br>}</pre> | no |
+| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br>    name       = string<br>    max_length = optional(number, 60)<br>  }))</pre> | <pre>{<br>  "postgresql_server": {<br>    "max_length": 60,<br>    "name": "psql"<br>  },<br>  "private_endpoint": {<br>    "max_length": 80,<br>    "name": "pe"<br>  },<br>  "private_service_connection": {<br>    "max_length": 80,<br>    "name": "pesc"<br>  },<br>  "resource_group": {<br>    "max_length": 60,<br>    "name": "rg"<br>  }<br>}</pre> | no |
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Number that represents the instance of the environment. | `number` | `0` | no |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Number that represents the instance of the resource. | `number` | `0` | no |
 | <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
@@ -162,6 +163,13 @@ No resources.
 | <a name="input_storage_mb"></a> [storage\_mb](#input\_storage\_mb) | The storage capacity of the Postgres Flexible Server in megabytes | `number` | `32768` | no |
 | <a name="input_storage_tier"></a> [storage\_tier](#input\_storage\_tier) | The storage tier of the Postgres Flexible Server. Default value based on `storage_mb` | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
+| <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Whether or not to create a Private Endpoint for the Postgres Flexible Server | `bool` | `false` | no |
+| <a name="input_private_endpoint_subnet_id"></a> [private\_endpoint\_subnet\_id](#input\_private\_endpoint\_subnet\_id) | The ID of the subnet to which the Postgres Flexible Server private endpoint is connected | `string` | `null` | no |
+| <a name="input_private_endpoint_dns_zone_ids"></a> [private\_endpoint\_dns\_zone\_ids](#input\_private\_endpoint\_dns\_zone\_ids) | A list of Private DNS Zone IDs to link with the Private Endpoint. | `list(string)` | `[]` | no |
+| <a name="input_private_endpoint_dns_zone_group_name"></a> [private\_endpoint\_dns\_zone\_group\_name](#input\_private\_endpoint\_dns\_zone\_group\_name) | Specifies the Name of the Private DNS Zone Group. | `string` | `"postgresqlServer"` | no |
+| <a name="input_private_endpoint_is_manual_connection"></a> [private\_endpoint\_is\_manual\_connection](#input\_private\_endpoint\_is\_manual\_connection) | Does the Private Endpoint require Manual Approval from the remote resource owner? Changing this forces a new resource<br>    to be created. | `bool` | `false` | no |
+| <a name="input_private_endpoint_subresource_names"></a> [private\_endpoint\_subresource\_names](#input\_private\_endpoint\_subresource\_names) | A list of subresource names which the Private Endpoint is able to connect to. subresource\_names corresponds to group\_id.<br>    Possible values are detailed in the product documentation in the Subresources column.<br>    https://docs.microsoft.com/azure/private-link/private-endpoint-overview#private-link-resource | `list(string)` | <pre>[<br>  "postgresqlServer"<br>]</pre> | no |
+| <a name="input_private_endpoint_request_message"></a> [private\_endpoint\_request\_message](#input\_private\_endpoint\_request\_message) | A message passed to the owner of the remote resource when the private endpoint attempts to establish the connection<br>    to the remote resource. The request message can be a maximum of 140 characters in length.<br>    Only valid if `is_manual_connection=true` | `string` | `""` | no |
 
 ## Outputs
 
@@ -178,4 +186,4 @@ No resources.
 | <a name="output_private_dns_zone_id"></a> [private\_dns\_zone\_id](#output\_private\_dns\_zone\_id) | n/a |
 | <a name="output_source_server_id"></a> [source\_server\_id](#output\_source\_server\_id) | n/a |
 | <a name="output_server_configuration"></a> [server\_configuration](#output\_server\_configuration) | n/a |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END_TF_DOCS -->

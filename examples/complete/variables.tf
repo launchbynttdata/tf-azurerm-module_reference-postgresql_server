@@ -110,7 +110,7 @@ variable "class_env" {
 variable "location" {
   description = "Location of the Postgres Flexible Server"
   type        = string
-  default     = "eastus2"
+  default     = "eastus"
 }
 
 variable "use_service_principal" {

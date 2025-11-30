@@ -403,3 +403,87 @@ variable "private_endpoint_request_message" {
   type        = string
   default     = ""
 }
+
+# Monitoring-related input variables
+
+variable "action_group" {
+  description = "Optional action group configuration. If null, monitor_action_group module will not be created."
+  type = object({
+    name            = string
+    short_name      = string
+    email_receivers = optional(list(object({ name = string, email_address = string })), [])
+    arm_role_receivers = optional(list(object({
+      name             = string
+      role_id          = string
+      object_id        = string
+      use_common_alert = optional(bool, false)
+    })), [])
+  })
+  default = null
+}
+
+variable "resource_group_name" {
+  description = "Optional resource group name for monitor resources. If empty, the generated resource_group name is used."
+  type        = string
+  default     = ""
+}
+
+variable "action_group_ids" {
+  description = "List of pre-existing Action Group resource IDs to attach to alert rules (in addition to any created by this module)."
+  type        = list(string)
+  default     = []
+}
+
+# Metric Alerts for PostgreSQL
+variable "metric_alerts" {
+  description = "Map of metric alert definitions for PostgreSQL server monitoring. Each alert must define either criteria or dynamic_criteria."
+  type = map(object({
+    description        = string
+    action_groups      = optional(set(string), [])
+    frequency          = optional(string, "PT1M")
+    severity           = optional(number, 3)
+    enabled            = optional(bool, true)
+    webhook_properties = optional(map(string))
+
+    criteria = optional(list(object({
+      metric_namespace       = string
+      metric_name            = string
+      aggregation            = string
+      operator               = string
+      threshold              = number
+      skip_metric_validation = optional(bool, false)
+      dimensions = optional(list(object({
+        name     = string
+        operator = string
+        values   = list(string)
+      })))
+    })))
+
+    dynamic_criteria = optional(object({
+      metric_namespace       = string
+      metric_name            = string
+      aggregation            = string
+      operator               = string
+      alert_sensitivity      = string
+      ignore_data_before     = optional(string)
+      skip_metric_validation = optional(bool, false)
+      dimensions = optional(list(object({
+        name     = string
+        operator = string
+        values   = list(string)
+      })))
+    }))
+  }))
+
+  default = {}
+
+  validation {
+    condition = alltrue(
+      [
+        for alert in var.metric_alerts :
+        !(alert.criteria == null && alert.dynamic_criteria == null)
+      ]
+    )
+    error_message = "At least one of 'criteria' or 'dynamic_criteria' must be defined for each metric alert."
+  }
+}

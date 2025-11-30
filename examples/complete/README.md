@@ -17,7 +17,7 @@ When running locally without service principal credentials, set `var.use_service
 | Name | Version |
 |------|---------|
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.6.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.7.0 |
 | <a name="provider_time"></a> [time](#provider\_time) | 0.13.1 |
 
 ## Modules
@@ -29,6 +29,8 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="module_virtual_network"></a> [virtual\_network](#module\_virtual\_network) | terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm | ~> 3.0 |
 | <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm | ~> 1.0 |
 | <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | ../.. | n/a |
+| <a name="module_monitor_action_group"></a> [monitor\_action\_group](#module\_monitor\_action\_group) | terraform.registry.launch.nttdata.com/module_primitive/monitor_action_group/azurerm | ~> 1.0 |
+| <a name="module_monitor_metric_alert"></a> [monitor\_metric\_alert](#module\_monitor\_metric\_alert) | terraform.registry.launch.nttdata.com/module_primitive/monitor_metric_alert/azurerm | ~> 2.0 |
 
 ## Resources
 
@@ -49,7 +51,7 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
 | <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | (Required) Name of the product service for which the resource is created.<br>    For example, backend, frontend, middleware etc. | `string` | `"database"` | no |
 | <a name="input_class_env"></a> [class\_env](#input\_class\_env) | (Required) Environment where resource is going to be deployed. For example. dev, qa, uat | `string` | `"dev"` | no |
-| <a name="input_location"></a> [location](#input\_location) | Location of the Postgres Flexible Server | `string` | `"eastus"` | no |
+| <a name="input_location"></a> [location](#input\_location) | Location of the Postgres Flexible Server | `string` | `"eastus2"` | no |
 | <a name="input_use_service_principal"></a> [use\_service\_principal](#input\_use\_service\_principal) | Set to false when running locally without a service principal | `bool` | `true` | no |
 | <a name="input_vnet_address_space"></a> [vnet\_address\_space](#input\_vnet\_address\_space) | Address space of the example vnet | `string` | `"10.0.200.0/24"` | no |
 | <a name="input_private_dns_zone_name"></a> [private\_dns\_zone\_name](#input\_private\_dns\_zone\_name) | Suffix of the private dns zone name | `string` | `"launchdso.postgres.database.azure.com"` | no |
@@ -73,6 +75,9 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="input_storage_mb"></a> [storage\_mb](#input\_storage\_mb) | The storage capacity of the Postgres Flexible Server in megabytes | `number` | `32768` | no |
 | <a name="input_storage_tier"></a> [storage\_tier](#input\_storage\_tier) | The storage tier of the Postgres Flexible Server. Default value based on `storage_mb` | `string` | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
+| <a name="input_action_group"></a> [action\_group](#input\_action\_group) | Optional action group configuration. If null the example will not create an action group. | <pre>object({<br>    name            = string<br>    short_name      = string<br>    email_receivers = optional(list(object({ name = string, email_address = string })), [])<br>    arm_role_receivers = optional(list(object({<br>      name             = string<br>      role_id          = string<br>      object_id        = string<br>      use_common_alert = optional(bool, false)<br>    })), [])<br>  })</pre> | n/a | yes |
+| <a name="input_action_group_ids"></a> [action\_group\_ids](#input\_action\_group\_ids) | Additional Action Group resource IDs to attach to alerts. | `list(string)` | `[]` | no |
+| <a name="input_metric_alerts"></a> [metric\_alerts](#input\_metric\_alerts) | Map of metric alert definitions for PostgreSQL monitoring. | <pre>map(object({<br>    description        = string<br>    action_groups      = optional(set(string), [])<br>    frequency          = optional(string, "PT1M")<br>    severity           = optional(number, 3)<br>    enabled            = optional(bool, true)<br>    webhook_properties = optional(map(string))<br><br>    criteria = optional(list(object({<br>      metric_namespace       = string<br>      metric_name            = string<br>      aggregation            = string<br>      operator               = string<br>      threshold              = number<br>      skip_metric_validation = optional(bool, false)<br>      dimensions = optional(list(object({<br>        name     = string<br>        operator = string<br>        values   = list(string)<br>      })))<br>    })))<br><br>    dynamic_criteria = optional(object({<br>      metric_namespace       = string<br>      metric_name            = string<br>      aggregation            = string<br>      operator               = string<br>      alert_sensitivity      = string<br>      ignore_data_before     = optional(string)<br>      skip_metric_validation = optional(bool, false)<br>      dimensions = optional(list(object({<br>        name     = string<br>        operator = string<br>        values   = list(string)<br>      })))<br>    }))<br>  }))</pre> | <pre>{<br>  "test_active_connections": {<br>    "criteria": [<br>      {<br>        "aggregation": "Average",<br>        "metric_name": "active_connections",<br>        "metric_namespace": "Microsoft.DBforPostgreSQL/flexibleServers",<br>        "operator": "GreaterThan",<br>        "threshold": 100<br>      }<br>    ],<br>    "description": "Active connections > 100 (default test alert)",<br>    "enabled": true,<br>    "frequency": "PT1M",<br>    "severity": 3<br>  },<br>  "test_cpu_percent": {<br>    "criteria": [<br>      {<br>        "aggregation": "Average",<br>        "metric_name": "cpu_percent",<br>        "metric_namespace": "Microsoft.DBforPostgreSQL/flexibleServers",<br>        "operator": "GreaterThan",<br>        "threshold": 70<br>      }<br>    ],<br>    "description": "CPU usage over 70% (default test alert)",<br>    "enabled": true,<br>    "frequency": "PT1M",<br>    "severity": 3<br>  }<br>}</pre> | no |
 
 ## Outputs
 

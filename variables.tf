@@ -487,3 +487,9 @@ variable "metric_alerts" {
     error_message = "At least one of 'criteria' or 'dynamic_criteria' must be defined for each metric alert."
   }
 }
+
+variable "auto_grow_enabled" {
+  description = "storage auto-grow for PostgreSQL Flexible Server."
+  type        = bool
+  default     = false
+}

@@ -38,8 +38,8 @@ module "resource_group" {
 }
 
 module "postgresql_server" {
-  source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm"
-  version = "~> 1.0"
+  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-postgresql_server.git?ref=feature/autogrow-enabled"
+  # version = "~> 1.0"
 
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name
@@ -61,8 +61,8 @@ module "postgresql_server" {
   private_dns_zone_id           = var.private_dns_zone_id
   public_network_access_enabled = var.public_network_access_enabled
 
-  high_availability = var.high_availability
-
+  high_availability            = var.high_availability
+  auto_grow_enabled            = var.auto_grow_enabled
   backup_retention_days        = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
 

@@ -141,6 +141,7 @@ module "postgresql_server" {
   public_network_access_enabled = var.public_network_access_enabled
 
   high_availability = var.high_availability
+  auto_grow_enabled = var.auto_grow_enabled
 
   backup_retention_days        = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled

@@ -38,8 +38,8 @@ module "resource_group" {
 }
 
 module "postgresql_server" {
-  source = "git::https://github.com/launchbynttdata/tf-azurerm-module_primitive-postgresql_server.git?ref=feature/autogrow-enabled"
-  # version = "~> 1.0"
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm"
+  version = "~> 1.1.0"
 
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name

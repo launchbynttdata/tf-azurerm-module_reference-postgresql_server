@@ -39,7 +39,7 @@ module "resource_group" {
 
 module "postgresql_server" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm"
-  version = "~> 1.1.0"
+  version = "~> 1.1"
 
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name

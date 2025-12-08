@@ -121,7 +121,7 @@ No providers.
 |------|--------|---------|
 | <a name="module_resource_names"></a> [resource\_names](#module\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 2.0 |
 | <a name="module_resource_group"></a> [resource\_group](#module\_resource\_group) | terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm | ~> 1.0 |
-| <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm | ~> 1.1.0 |
+| <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm | ~> 1.1 |
 | <a name="module_postgresql_server_configuration"></a> [postgresql\_server\_configuration](#module\_postgresql\_server\_configuration) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_configuration/azurerm | ~> 1.0 |
 | <a name="module_postgresql_server_ad_administrator"></a> [postgresql\_server\_ad\_administrator](#module\_postgresql\_server\_ad\_administrator) | terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_ad_administrator/azurerm | ~> 1.0 |
 | <a name="module_private_endpoint"></a> [private\_endpoint](#module\_private\_endpoint) | terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm | ~> 1.0 |

@@ -141,6 +141,7 @@ module "postgresql_server" {
   public_network_access_enabled = var.public_network_access_enabled
 
   high_availability = var.high_availability
+  auto_grow_enabled = var.auto_grow_enabled
 
   backup_retention_days        = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
@@ -153,4 +154,48 @@ module "postgresql_server" {
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 
   depends_on = [module.network_resource_group, module.virtual_network, module.private_dns_zone, time_sleep.wait_after_destroy]
+}
+
+# Example action group (optional – only if you want a test alert receiver)
+module "monitor_action_group" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_action_group/azurerm"
+  version = "~> 1.0"
+
+  # only create the action group when an action_group object is provided
+  count               = var.action_group != null ? 1 : 0
+  action_group_name   = var.action_group != null ? var.action_group.name : null
+  resource_group_name = module.network_resource_group.name
+  short_name          = var.action_group != null ? var.action_group.short_name : null
+  arm_role_receivers  = var.action_group != null ? var.action_group.arm_role_receivers : []
+  email_receivers     = var.action_group != null ? var.action_group.email_receivers : []
+  tags                = var.tags
+
+  depends_on = [module.network_resource_group]
+}
+
+module "monitor_metric_alert" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_metric_alert/azurerm"
+  version = "~> 2.0"
+
+  for_each            = var.metric_alerts
+  name                = each.key
+  resource_group_name = module.network_resource_group.name
+
+  scopes = [module.postgresql_server.id]
+
+  description = each.value.description
+  frequency   = each.value.frequency
+  severity    = each.value.severity
+  enabled     = each.value.enabled
+
+  action_group_ids = concat(
+    coalesce(var.action_group_ids, []),
+    var.action_group != null ? [module.monitor_action_group[0].action_group_id] : []
+  )
+
+  webhook_properties = each.value.webhook_properties
+  criteria           = each.value.criteria
+  dynamic_criteria   = each.value.dynamic_criteria
+
+  depends_on = [module.postgresql_server]
 }

@@ -39,7 +39,7 @@ module "resource_group" {
 
 module "postgresql_server" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm"
-  version = "~> 1.0"
+  version = "~> 1.1"
 
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name
@@ -61,8 +61,8 @@ module "postgresql_server" {
   private_dns_zone_id           = var.private_dns_zone_id
   public_network_access_enabled = var.public_network_access_enabled
 
-  high_availability = var.high_availability
-
+  high_availability            = var.high_availability
+  auto_grow_enabled            = var.auto_grow_enabled
   backup_retention_days        = var.backup_retention_days
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
 
@@ -127,6 +127,51 @@ module "private_endpoint" {
   private_service_connection_name = module.resource_names["private_service_connection"].standard
 
   tags = merge(var.tags, { resource_name = module.resource_names["private_endpoint"].standard })
+
+  depends_on = [module.postgresql_server]
+}
+
+module "monitor_action_group" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_action_group/azurerm"
+  version = "~> 1.0.0"
+
+  count               = var.action_group != null ? 1 : 0
+  action_group_name   = var.action_group.name
+  resource_group_name = coalesce(var.resource_group_name, module.resource_names["resource_group"].standard)
+  short_name          = var.action_group.short_name
+  arm_role_receivers  = var.action_group.arm_role_receivers
+  email_receivers     = var.action_group.email_receivers
+  tags                = var.tags
+
+  depends_on = [module.resource_group]
+}
+
+# metric alerts for PostgreSQL server
+module "monitor_metric_alert" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_metric_alert/azurerm"
+  version = "~> 2.0"
+
+  for_each            = var.metric_alerts
+  name                = each.key
+  resource_group_name = coalesce(var.resource_group_name, module.resource_names["resource_group"].standard)
+
+  # IMPORTANT: scope must be the resource id of the PostgreSQL server
+  scopes = [module.postgresql_server.id]
+
+  description = each.value.description
+  frequency   = each.value.frequency
+  severity    = each.value.severity
+  enabled     = each.value.enabled
+
+  # Build action group ids safely: combine any explicit var.action_group_ids with one created locally (if created)
+  action_group_ids = concat(
+    coalesce(var.action_group_ids, []),
+    var.action_group != null ? [module.monitor_action_group[0].action_group_id] : []
+  )
+
+  webhook_properties = each.value.webhook_properties
+  criteria           = each.value.criteria
+  dynamic_criteria   = each.value.dynamic_criteria
 
   depends_on = [module.postgresql_server]
 }

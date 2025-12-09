@@ -358,3 +358,118 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "action_group" {
+  description = "Optional action group configuration. If null the example will not create an action group."
+  type = object({
+    name            = string
+    short_name      = string
+    email_receivers = optional(list(object({ name = string, email_address = string })), [])
+    arm_role_receivers = optional(list(object({
+      name             = string
+      role_id          = string
+      object_id        = string
+      use_common_alert = optional(bool, false)
+    })), [])
+  })
+}
+
+# Optional list of pre-existing Action Group IDs to attach to alerts
+variable "action_group_ids" {
+  description = "Additional Action Group resource IDs to attach to alerts."
+  type        = list(string)
+  default     = []
+}
+
+variable "metric_alerts" {
+  description = "Map of metric alert definitions for PostgreSQL monitoring."
+  type = map(object({
+    description        = string
+    action_groups      = optional(set(string), [])
+    frequency          = optional(string, "PT1M")
+    severity           = optional(number, 3)
+    enabled            = optional(bool, true)
+    webhook_properties = optional(map(string))
+
+    criteria = optional(list(object({
+      metric_namespace       = string
+      metric_name            = string
+      aggregation            = string
+      operator               = string
+      threshold              = number
+      skip_metric_validation = optional(bool, false)
+      dimensions = optional(list(object({
+        name     = string
+        operator = string
+        values   = list(string)
+      })))
+    })))
+
+    dynamic_criteria = optional(object({
+      metric_namespace       = string
+      metric_name            = string
+      aggregation            = string
+      operator               = string
+      alert_sensitivity      = string
+      ignore_data_before     = optional(string)
+      skip_metric_validation = optional(bool, false)
+      dimensions = optional(list(object({
+        name     = string
+        operator = string
+        values   = list(string)
+      })))
+    }))
+  }))
+
+  default = {
+    test_cpu_percent = {
+      description = "CPU usage over 70% (default test alert)"
+      frequency   = "PT1M"
+      severity    = 3
+      enabled     = true
+
+      criteria = [
+        {
+          metric_namespace = "Microsoft.DBforPostgreSQL/flexibleServers"
+          metric_name      = "cpu_percent"
+          aggregation      = "Average"
+          operator         = "GreaterThan"
+          threshold        = 70
+        }
+      ]
+    }
+
+    test_active_connections = {
+      description = "Active connections > 100 (default test alert)"
+      frequency   = "PT1M"
+      severity    = 3
+      enabled     = true
+
+      criteria = [
+        {
+          metric_namespace = "Microsoft.DBforPostgreSQL/flexibleServers"
+          metric_name      = "active_connections"
+          aggregation      = "Average"
+          operator         = "GreaterThan"
+          threshold        = 100
+        }
+      ]
+    }
+  }
+
+  validation {
+    condition = alltrue(
+      [
+        for alert in var.metric_alerts :
+        !(alert.criteria == null && alert.dynamic_criteria == null)
+      ]
+    )
+    error_message = "At least one of 'criteria' or 'dynamic_criteria' must be defined for each metric alert."
+  }
+}
+
+variable "auto_grow_enabled" {
+  description = "storage auto-grow for PostgreSQL Flexible Server is enabled."
+  type        = bool
+  default     = true
+}

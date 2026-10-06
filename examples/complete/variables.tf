@@ -359,6 +359,32 @@ variable "tags" {
   default     = {}
 }
 
+variable "log_analytics_workspace_id" {
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided."
+  type        = string
+  default     = null
+}
+
+variable "diagnostic_setting_name" {
+  description = "Name of the PostgreSQL Flexible Server diagnostic setting."
+  type        = string
+  default     = "postgresql-server-diagnostics"
+}
+
+variable "diagnostic_log_categories" {
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics."
+  type        = list(string)
+  default = [
+    "PostgreSQLLogs",
+    "PostgreSQLFlexSessions",
+    "PostgreSQLFlexQueryStoreRuntime",
+    "PostgreSQLFlexQueryStoreWaitStats",
+    "PostgreSQLFlexTableStats",
+    "PostgreSQLFlexDatabaseXacts",
+    "PostgreSQLFlexPGBouncer",
+  ]
+}
+
 variable "action_group" {
   description = "Optional action group configuration. If null the example will not create an action group."
   type = object({

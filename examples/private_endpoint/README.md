@@ -7,18 +7,18 @@ When running locally without service principal credentials, set `var.use_service
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.5 |
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 3.0 |
-| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.113 |
+| <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | >= 4.0, < 5.0 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.12 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.117.1 |
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.7.0 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.13.1 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 4.81.0 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 3.10.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.14.2 |
 
 ## Modules
 
@@ -44,11 +44,11 @@ When running locally without service principal credentials, set `var.use_service
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br>    name       = string<br>    max_length = optional(number, 60)<br>  }))</pre> | <pre>{<br>  "postgresql_server": {<br>    "max_length": 60,<br>    "name": "psql"<br>  },<br>  "private_endpoint": {<br>    "max_length": 80,<br>    "name": "pe"<br>  },<br>  "private_service_connection": {<br>    "max_length": 80,<br>    "name": "pesc"<br>  },<br>  "resource_group": {<br>    "max_length": 60,<br>    "name": "rg"<br>  },<br>  "virtual_network": {<br>    "max_length": 60,<br>    "name": "vnet"<br>  }<br>}</pre> | no |
+| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br/>    name       = string<br/>    max_length = optional(number, 60)<br/>  }))</pre> | <pre>{<br/>  "postgresql_server": {<br/>    "max_length": 60,<br/>    "name": "psql"<br/>  },<br/>  "private_endpoint": {<br/>    "max_length": 80,<br/>    "name": "pe"<br/>  },<br/>  "private_service_connection": {<br/>    "max_length": 80,<br/>    "name": "pesc"<br/>  },<br/>  "resource_group": {<br/>    "max_length": 60,<br/>    "name": "rg"<br/>  },<br/>  "virtual_network": {<br/>    "max_length": 60,<br/>    "name": "vnet"<br/>  }<br/>}</pre> | no |
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Number that represents the instance of the environment. | `number` | `0` | no |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Number that represents the instance of the resource. | `number` | `0` | no |
-| <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
-| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | (Required) Name of the product service for which the resource is created.<br>    For example, backend, frontend, middleware etc. | `string` | `"postgresql"` | no |
+| <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br/>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
+| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | (Required) Name of the product service for which the resource is created.<br/>    For example, backend, frontend, middleware etc. | `string` | `"postgresql"` | no |
 | <a name="input_class_env"></a> [class\_env](#input\_class\_env) | (Required) Environment where resource is going to be deployed. For example. dev, qa, uat | `string` | `"dev"` | no |
 | <a name="input_location"></a> [location](#input\_location) | Location of the Postgres Flexible Server | `string` | `"eastus"` | no |
 | <a name="input_use_service_principal"></a> [use\_service\_principal](#input\_use\_service\_principal) | Set to false when running locally without a service principal | `bool` | `true` | no |
@@ -59,21 +59,24 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="input_postgres_version"></a> [postgres\_version](#input\_postgres\_version) | Version of the Postgres Flexible Server. Required when `create_mode` is Default | `string` | `"16"` | no |
 | <a name="input_server_configuration"></a> [server\_configuration](#input\_server\_configuration) | Map of configurations to apply to the postgres flexible server | `map(string)` | `{}` | no |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether or not public network access is allowed for this server | `bool` | `false` | no |
-| <a name="input_authentication"></a> [authentication](#input\_authentication) | active\_directory\_auth\_enabled = Whether or not Active Directory authentication is enabled for this server<br>password\_auth\_enabled         = Whether or not password authentication is enabled for this server<br>tenant\_id                     = The tenant ID of the Active Directory to use for authentication | <pre>object({<br>    active_directory_auth_enabled = optional(bool)<br>    password_auth_enabled         = optional(bool)<br>    tenant_id                     = optional(string)<br>  })</pre> | `null` | no |
-| <a name="input_ad_administrator"></a> [ad\_administrator](#input\_ad\_administrator) | tenant\_id      = The tenant ID of the AD administrator<br>object\_id      = The object ID of the AD administrator<br>principal\_name = The name of the princiapl to assign as AD administrator<br>principal\_type = The type of princiapl to assign as AD administrator | <pre>object({<br>    tenant_id      = string<br>    object_id      = string<br>    principal_name = string<br>    principal_type = string<br>  })</pre> | `null` | no |
-| <a name="input_administrator_login"></a> [administrator\_login](#input\_administrator\_login) | The administrator login for the Postgres Flexible Server.<br>Required when `create_mode` is Default and `authentication.password_auth_enabled` is true | `string` | `null` | no |
-| <a name="input_administrator_password"></a> [administrator\_password](#input\_administrator\_password) | The administrator password for the Postgres Flexible Server.<br>Required when `create_mode` is Default and `authentication.password_auth_enabled` is true | `string` | `null` | no |
+| <a name="input_authentication"></a> [authentication](#input\_authentication) | active\_directory\_auth\_enabled = Whether or not Active Directory authentication is enabled for this server<br/>password\_auth\_enabled         = Whether or not password authentication is enabled for this server<br/>tenant\_id                     = The tenant ID of the Active Directory to use for authentication | <pre>object({<br/>    active_directory_auth_enabled = optional(bool)<br/>    password_auth_enabled         = optional(bool)<br/>    tenant_id                     = optional(string)<br/>  })</pre> | `null` | no |
+| <a name="input_ad_administrator"></a> [ad\_administrator](#input\_ad\_administrator) | tenant\_id      = The tenant ID of the AD administrator<br/>object\_id      = The object ID of the AD administrator<br/>principal\_name = The name of the princiapl to assign as AD administrator<br/>principal\_type = The type of princiapl to assign as AD administrator | <pre>object({<br/>    tenant_id      = string<br/>    object_id      = string<br/>    principal_name = string<br/>    principal_type = string<br/>  })</pre> | `null` | no |
+| <a name="input_administrator_login"></a> [administrator\_login](#input\_administrator\_login) | The administrator login for the Postgres Flexible Server.<br/>Required when `create_mode` is Default and `authentication.password_auth_enabled` is true | `string` | `null` | no |
+| <a name="input_administrator_password"></a> [administrator\_password](#input\_administrator\_password) | The administrator password for the Postgres Flexible Server.<br/>Required when `create_mode` is Default and `authentication.password_auth_enabled` is true | `string` | `null` | no |
 | <a name="input_backup_retention_days"></a> [backup\_retention\_days](#input\_backup\_retention\_days) | The backup retention days for the Postgres Flexible Server, between 7 and 35 days | `number` | `7` | no |
 | <a name="input_geo_redundant_backup_enabled"></a> [geo\_redundant\_backup\_enabled](#input\_geo\_redundant\_backup\_enabled) | Whether or not geo-redundant backups are enabled for this server | `bool` | `false` | no |
 | <a name="input_zone"></a> [zone](#input\_zone) | The zone of the Postgres Flexible Server | `string` | `null` | no |
-| <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability) | mode                      = The high availability mode. Possible values are SameZone or ZoneRedundant<br>standby\_availability\_zone = The availability zone for the standby server | <pre>object({<br>    mode                      = string<br>    standby_availability_zone = optional(string)<br>  })</pre> | `null` | no |
+| <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability) | mode                      = The high availability mode. Possible values are SameZone or ZoneRedundant<br/>standby\_availability\_zone = The availability zone for the standby server | <pre>object({<br/>    mode                      = string<br/>    standby_availability_zone = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_identity_ids"></a> [identity\_ids](#input\_identity\_ids) | Specifies a list of User Assigned Managed Identity IDs to be assigned | `list(string)` | `null` | no |
-| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The maintenance window of the Postgres Flexible Server<br>day\_of\_week = The day of the week when maintenance should be performed<br>start\_hour   = The start hour of the maintenance window<br>start\_minute = The start minute of the maintenance window | <pre>object({<br>    day_of_week  = optional(string, 0)<br>    start_hour   = optional(number, 0)<br>    start_minute = optional(number, 0)<br>  })</pre> | <pre>{<br>  "day_of_week": 0,<br>  "start_hour": 0,<br>  "start_minute": 0<br>}</pre> | no |
+| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The maintenance window of the Postgres Flexible Server<br/>day\_of\_week = The day of the week when maintenance should be performed<br/>start\_hour   = The start hour of the maintenance window<br/>start\_minute = The start minute of the maintenance window | <pre>object({<br/>    day_of_week  = optional(string, 0)<br/>    start_hour   = optional(number, 0)<br/>    start_minute = optional(number, 0)<br/>  })</pre> | <pre>{<br/>  "day_of_week": 0,<br/>  "start_hour": 0,<br/>  "start_minute": 0<br/>}</pre> | no |
 | <a name="input_source_server_id"></a> [source\_server\_id](#input\_source\_server\_id) | The ID of the source Postgres Flexible Server to restore from. Required when `create_mode` is GeoRestore, PointInTimeRestore, or Replica | `string` | `null` | no |
 | <a name="input_storage_mb"></a> [storage\_mb](#input\_storage\_mb) | The storage capacity of the Postgres Flexible Server in megabytes | `number` | `32768` | no |
 | <a name="input_storage_tier"></a> [storage\_tier](#input\_storage\_tier) | The storage tier of the Postgres Flexible Server. Default value based on `storage_mb` | `string` | `null` | no |
 | <a name="input_create_private_endpoint"></a> [create\_private\_endpoint](#input\_create\_private\_endpoint) | Whether or not to create a Private Endpoint for the Postgres Flexible Server | `bool` | `true` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
+| <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided. | `string` | `null` | no |
+| <a name="input_diagnostic_setting_name"></a> [diagnostic\_setting\_name](#input\_diagnostic\_setting\_name) | Name of the PostgreSQL Flexible Server diagnostic setting. | `string` | `"postgresql-server-diagnostics"` | no |
+| <a name="input_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#input\_diagnostic\_log\_categories) | PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics. | `list(string)` | <pre>[<br/>  "PostgreSQLLogs",<br/>  "PostgreSQLFlexSessions",<br/>  "PostgreSQLFlexQueryStoreRuntime",<br/>  "PostgreSQLFlexQueryStoreWaitStats",<br/>  "PostgreSQLFlexTableStats",<br/>  "PostgreSQLFlexDatabaseXacts",<br/>  "PostgreSQLFlexPGBouncer"<br/>]</pre> | no |
 
 ## Outputs
 

@@ -162,5 +162,9 @@ module "postgresql_server" {
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+  diagnostic_setting_name    = var.diagnostic_setting_name
+  diagnostic_log_categories  = var.diagnostic_log_categories
+
   depends_on = [module.network_resource_group, module.virtual_network, module.private_dns_zone, time_sleep.wait_after_destroy]
 }

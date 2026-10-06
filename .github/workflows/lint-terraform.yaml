@@ -15,5 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Install mise
+      uses: jdx/mise-action@v2
     - name: Lint Terraform
       uses: launchbynttdata/actions-lcaf-terraform_lint@v0

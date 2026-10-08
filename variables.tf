@@ -155,7 +155,7 @@ variable "log_analytics_workspace_id" {
   default     = null
 
   validation {
-    condition     = var.log_analytics_workspace_id == null || trimspace(var.log_analytics_workspace_id) != ""
+    condition     = var.log_analytics_workspace_id == null ? true : trimspace(var.log_analytics_workspace_id) != ""
     error_message = "log_analytics_workspace_id must be null or a non-empty resource ID."
   }
 }

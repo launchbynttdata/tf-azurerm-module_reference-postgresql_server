@@ -9,7 +9,7 @@ server_configuration = {
 
 zone = "1"
 
-use_service_principal = false
+# use_service_principal = false
 
 action_group = {
   name       = "test-action"

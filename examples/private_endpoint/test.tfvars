@@ -9,4 +9,5 @@ server_configuration = {
 
 create_private_endpoint = true
 
-zone = "1"
+location = "northeurope"
+zone     = "1"

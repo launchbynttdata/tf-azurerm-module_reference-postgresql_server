@@ -7,9 +7,10 @@ server_configuration = {
 # uncomment when running locally without a service principal
 # use_service_principal = false
 
-zone = "1"
+location = "northeurope"
+zone     = "1"
 
-use_service_principal = false
+# use_service_principal = false
 
 action_group = {
   name       = "test-action"

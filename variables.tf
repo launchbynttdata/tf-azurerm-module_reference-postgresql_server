@@ -149,6 +149,42 @@ variable "server_configuration" {
   default     = {}
 }
 
+variable "log_analytics_workspace_id" {
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.log_analytics_workspace_id == null ? true : trimspace(var.log_analytics_workspace_id) != ""
+    error_message = "log_analytics_workspace_id must be null or a non-empty resource ID."
+  }
+}
+
+variable "diagnostic_setting_name" {
+  description = "Name of the PostgreSQL Flexible Server diagnostic setting."
+  type        = string
+  default     = "postgresql-server-diagnostics"
+
+  validation {
+    condition     = trimspace(var.diagnostic_setting_name) != ""
+    error_message = "diagnostic_setting_name must not be empty."
+  }
+}
+
+variable "diagnostic_log_categories" {
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics."
+  type        = list(string)
+  default = [
+    "PostgreSQLLogs",
+    "PostgreSQLFlexSessions",
+    "PostgreSQLFlexQueryStoreRuntime",
+    "PostgreSQLFlexQueryStoreWaitStats",
+    "PostgreSQLFlexTableStats",
+    "PostgreSQLFlexDatabaseXacts",
+    "PostgreSQLFlexPGBouncer",
+  ]
+}
+
 variable "delegated_subnet_id" {
   description = "The ID of the subnet to which the Postgres Flexible Server is delegated"
   type        = string

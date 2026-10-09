@@ -26,7 +26,7 @@ data "azuread_user" "client" {
 
 module "resource_names" {
   source  = "terraform.registry.launch.nttdata.com/module_library/resource_name/launch"
-  version = "~> 2.0"
+  version = "~> 2.4"
 
   for_each = var.resource_names_map
 
@@ -42,7 +42,7 @@ module "resource_names" {
 
 module "network_resource_group" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   name     = module.resource_names["resource_group"].minimal_random_suffix
   location = var.location
@@ -52,7 +52,7 @@ module "network_resource_group" {
 
 module "virtual_network" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm"
-  version = "~> 3.0"
+  version = "~> 4.0"
 
   vnet_name           = module.resource_names["virtual_network"].minimal_random_suffix
   resource_group_name = module.network_resource_group.name
@@ -78,7 +78,7 @@ module "virtual_network" {
 
 module "private_dns_zone" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   zone_name           = var.private_dns_zone_name
   resource_group_name = module.network_resource_group.name
@@ -153,13 +153,17 @@ module "postgresql_server" {
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+  diagnostic_setting_name    = var.diagnostic_setting_name
+  diagnostic_log_categories  = var.diagnostic_log_categories
+
   depends_on = [module.network_resource_group, module.virtual_network, module.private_dns_zone, time_sleep.wait_after_destroy]
 }
 
 # Example action group (optional – only if you want a test alert receiver)
 module "monitor_action_group" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_action_group/azurerm"
-  version = "~> 1.0"
+  version = "~> 1.2"
 
   # only create the action group when an action_group object is provided
   count               = var.action_group != null ? 1 : 0

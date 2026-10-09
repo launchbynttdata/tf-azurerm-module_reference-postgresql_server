@@ -39,7 +39,7 @@ module "resource_group" {
 
 module "postgresql_server" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server/azurerm"
-  version = "~> 1.1"
+  version = "~> 3.0"
 
   name                = module.resource_names["postgresql_server"].standard
   resource_group_name = module.resource_group.name
@@ -76,9 +76,27 @@ module "postgresql_server" {
   depends_on = [module.resource_group]
 }
 
+module "postgresql_server_diagnostic_setting" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_diagnostic_setting/azurerm"
+  version = "~> 4.0"
+
+  count = var.log_analytics_workspace_id != null ? 1 : 0
+
+  name                       = var.diagnostic_setting_name
+  target_resource_id         = module.postgresql_server.id
+  log_analytics_workspace_id = var.log_analytics_workspace_id
+  enabled_log = [
+    for category in var.diagnostic_log_categories : {
+      category = category
+    }
+  ]
+
+  depends_on = [module.postgresql_server]
+}
+
 module "postgresql_server_configuration" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_configuration/azurerm"
-  version = "~> 1.0"
+  version = "~> 3.0"
 
   for_each = var.server_configuration
 
@@ -92,7 +110,7 @@ module "postgresql_server_configuration" {
 
 module "postgresql_server_ad_administrator" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/postgresql_server_ad_administrator/azurerm"
-  version = "~> 1.0"
+  version = "~> 3.0"
 
   count = (var.ad_administrator != null) ? 1 : 0
 
@@ -110,7 +128,7 @@ module "postgresql_server_ad_administrator" {
 
 module "private_endpoint" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/private_endpoint/azurerm"
-  version = "~> 1.0"
+  version = "~> 3.0"
 
   count = var.create_private_endpoint ? 1 : 0
 
@@ -133,7 +151,7 @@ module "private_endpoint" {
 
 module "monitor_action_group" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_action_group/azurerm"
-  version = "~> 1.0.0"
+  version = "~> 1.2"
 
   count               = var.action_group != null ? 1 : 0
   action_group_name   = var.action_group.name

@@ -70,6 +70,23 @@ module "virtual_network" {
   depends_on = [module.network_resource_group]
 }
 
+module "diagnostics_workspace" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/log_analytics_workspace/azurerm"
+  version = "~> 2.0"
+
+  count = var.log_analytics_workspace_id == null ? 1 : 0
+
+  name                = module.resource_names["log_analytics_workspace"].standard
+  resource_group_name = module.network_resource_group.name
+  location            = var.location
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = var.tags
+
+  depends_on = [module.network_resource_group]
+}
+
 module "private_dns_zone" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm"
   version = "~> 1.0"
@@ -161,6 +178,11 @@ module "postgresql_server" {
   zone             = var.zone
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
+
+  enable_diagnostics         = true
+  log_analytics_workspace_id = var.log_analytics_workspace_id != null ? var.log_analytics_workspace_id : module.diagnostics_workspace[0].id
+  diagnostic_setting_name    = var.diagnostic_setting_name
+  diagnostic_log_categories  = var.diagnostic_log_categories
 
   depends_on = [module.network_resource_group, module.virtual_network, module.private_dns_zone, time_sleep.wait_after_destroy]
 }

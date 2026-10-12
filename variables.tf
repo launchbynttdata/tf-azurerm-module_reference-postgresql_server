@@ -149,6 +149,64 @@ variable "server_configuration" {
   default     = {}
 }
 
+variable "log_analytics_workspace_id" {
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.log_analytics_workspace_id == null ? true : trimspace(var.log_analytics_workspace_id) != ""
+    error_message = "log_analytics_workspace_id must be null or a non-empty resource ID."
+  }
+}
+
+variable "enable_diagnostics" {
+  description = "Whether to create a diagnostic setting. Set this to true when log_analytics_workspace_id is supplied, including when its value is unknown until apply."
+  type        = bool
+  default     = false
+}
+
+variable "diagnostic_setting_name" {
+  description = "Name of the PostgreSQL Flexible Server diagnostic setting."
+  type        = string
+  default     = "postgresql-server-diagnostics"
+
+  validation {
+    condition     = trimspace(var.diagnostic_setting_name) != ""
+    error_message = "diagnostic_setting_name must not be empty."
+  }
+}
+
+variable "diagnostic_log_categories" {
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics."
+  type        = list(string)
+  default = [
+    "PostgreSQLLogs",
+    "PostgreSQLFlexSessions",
+    "PostgreSQLFlexQueryStoreRuntime",
+    "PostgreSQLFlexQueryStoreWaitStats",
+    "PostgreSQLFlexTableStats",
+    "PostgreSQLFlexDatabaseXacts",
+    "PostgreSQLFlexPGBouncer",
+  ]
+
+  validation {
+    condition = length(var.diagnostic_log_categories) > 0 && alltrue([
+      for category in var.diagnostic_log_categories : contains([
+        "PostgreSQLLogs",
+        "PostgreSQLFlexSessions",
+        "PostgreSQLFlexQueryStoreRuntime",
+        "PostgreSQLFlexQueryStoreWaitStats",
+        "PostgreSQLFlexTableStats",
+        "PostgreSQLFlexDatabaseXacts",
+        "PostgreSQLFlexPGBouncer",
+        "PostgreSQLQueryStoreSqlText",
+      ], category)
+    ])
+    error_message = "diagnostic_log_categories must contain at least one supported PostgreSQL Flexible Server log category."
+  }
+}
+
 variable "delegated_subnet_id" {
   description = "The ID of the subnet to which the Postgres Flexible Server is delegated"
   type        = string

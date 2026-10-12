@@ -4,12 +4,9 @@ server_configuration = {
   "log_connections" = "on"
 }
 
-# uncomment when running locally without a service principal
-# use_service_principal = false
+location = "northeurope"
+zone     = "1"
 
-zone = "1"
-
-use_service_principal = false
 
 action_group = {
   name       = "test-action"

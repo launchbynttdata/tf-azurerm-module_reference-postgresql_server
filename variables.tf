@@ -183,6 +183,22 @@ variable "diagnostic_log_categories" {
     "PostgreSQLFlexDatabaseXacts",
     "PostgreSQLFlexPGBouncer",
   ]
+
+  validation {
+    condition = length(var.diagnostic_log_categories) > 0 && alltrue([
+      for category in var.diagnostic_log_categories : contains([
+        "PostgreSQLLogs",
+        "PostgreSQLFlexSessions",
+        "PostgreSQLFlexQueryStoreRuntime",
+        "PostgreSQLFlexQueryStoreWaitStats",
+        "PostgreSQLFlexTableStats",
+        "PostgreSQLFlexDatabaseXacts",
+        "PostgreSQLFlexPGBouncer",
+        "PostgreSQLQueryStoreSqlText",
+      ], category)
+    ])
+    error_message = "diagnostic_log_categories must contain at least one supported PostgreSQL Flexible Server log category."
+  }
 }
 
 variable "delegated_subnet_id" {

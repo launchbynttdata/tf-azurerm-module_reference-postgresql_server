@@ -53,3 +53,23 @@ output "source_server_id" {
 output "server_configuration" {
   value = { for config in module.postgresql_server_configuration : config.name => config.value }
 }
+
+output "diagnostic_setting_id" {
+  description = "ID of the PostgreSQL diagnostic setting, or null when diagnostic settings are disabled."
+  value       = try(module.postgresql_server_diagnostic_setting[0].id, null)
+}
+
+output "diagnostic_setting_name" {
+  description = "Name of the PostgreSQL diagnostic setting, or null when diagnostic settings are disabled."
+  value       = try(module.postgresql_server_diagnostic_setting[0].name, null)
+}
+
+output "diagnostic_log_analytics_workspace_id" {
+  description = "Log Analytics workspace ID receiving PostgreSQL diagnostic logs, or null when diagnostic settings are disabled."
+  value       = var.log_analytics_workspace_id
+}
+
+output "diagnostic_log_categories" {
+  description = "PostgreSQL log categories enabled by this module, or an empty list when diagnostic settings are disabled."
+  value       = var.log_analytics_workspace_id == null ? [] : var.diagnostic_log_categories
+}

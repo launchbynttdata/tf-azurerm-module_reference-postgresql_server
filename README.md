@@ -197,4 +197,8 @@ No resources.
 | <a name="output_private_dns_zone_id"></a> [private\_dns\_zone\_id](#output\_private\_dns\_zone\_id) | n/a |
 | <a name="output_source_server_id"></a> [source\_server\_id](#output\_source\_server\_id) | n/a |
 | <a name="output_server_configuration"></a> [server\_configuration](#output\_server\_configuration) | n/a |
+| <a name="output_diagnostic_setting_id"></a> [diagnostic\_setting\_id](#output\_diagnostic\_setting\_id) | ID of the PostgreSQL diagnostic setting, or null when diagnostic settings are disabled. |
+| <a name="output_diagnostic_setting_name"></a> [diagnostic\_setting\_name](#output\_diagnostic\_setting\_name) | Name of the PostgreSQL diagnostic setting, or null when diagnostic settings are disabled. |
+| <a name="output_diagnostic_log_analytics_workspace_id"></a> [diagnostic\_log\_analytics\_workspace\_id](#output\_diagnostic\_log\_analytics\_workspace\_id) | Log Analytics workspace ID receiving PostgreSQL diagnostic logs, or null when diagnostic settings are disabled. |
+| <a name="output_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#output\_diagnostic\_log\_categories) | PostgreSQL log categories enabled by this module, or an empty list when diagnostic settings are disabled. |
 <!-- END_TF_DOCS -->

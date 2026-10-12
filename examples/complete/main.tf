@@ -50,6 +50,23 @@ module "network_resource_group" {
   tags = merge(var.tags, { resource_name = module.resource_names["resource_group"].standard })
 }
 
+module "diagnostics_workspace" {
+  source  = "terraform.registry.launch.nttdata.com/module_primitive/log_analytics_workspace/azurerm"
+  version = "~> 2.0"
+
+  count = var.log_analytics_workspace_id == null ? 1 : 0
+
+  name                = module.resource_names["log_analytics_workspace"].standard
+  resource_group_name = module.network_resource_group.name
+  location            = var.location
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+
+  tags = var.tags
+
+  depends_on = [module.network_resource_group]
+}
+
 module "virtual_network" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm"
   version = "~> 4.0"
@@ -153,7 +170,7 @@ module "postgresql_server" {
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 
-  log_analytics_workspace_id = var.log_analytics_workspace_id
+  log_analytics_workspace_id = var.log_analytics_workspace_id != null ? var.log_analytics_workspace_id : module.diagnostics_workspace[0].id
   diagnostic_setting_name    = var.diagnostic_setting_name
   diagnostic_log_categories  = var.diagnostic_log_categories
 

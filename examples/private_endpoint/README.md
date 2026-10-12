@@ -87,4 +87,8 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="output_postgres_fqdn"></a> [postgres\_fqdn](#output\_postgres\_fqdn) | n/a |
 | <a name="output_vnet_id"></a> [vnet\_id](#output\_vnet\_id) | n/a |
 | <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name) | n/a |
+| <a name="output_diagnostic_setting_id"></a> [diagnostic\_setting\_id](#output\_diagnostic\_setting\_id) | n/a |
+| <a name="output_diagnostic_setting_name"></a> [diagnostic\_setting\_name](#output\_diagnostic\_setting\_name) | n/a |
+| <a name="output_diagnostic_log_analytics_workspace_id"></a> [diagnostic\_log\_analytics\_workspace\_id](#output\_diagnostic\_log\_analytics\_workspace\_id) | n/a |
+| <a name="output_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#output\_diagnostic\_log\_categories) | n/a |
 <!-- END_TF_DOCS -->

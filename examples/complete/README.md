@@ -26,6 +26,7 @@ When running locally without service principal credentials, set `var.use_service
 |------|--------|---------|
 | <a name="module_resource_names"></a> [resource\_names](#module\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 2.4 |
 | <a name="module_network_resource_group"></a> [network\_resource\_group](#module\_network\_resource\_group) | terraform.registry.launch.nttdata.com/module_primitive/resource_group/azurerm | ~> 2.0 |
+| <a name="module_diagnostics_workspace"></a> [diagnostics\_workspace](#module\_diagnostics\_workspace) | terraform.registry.launch.nttdata.com/module_primitive/log_analytics_workspace/azurerm | ~> 2.0 |
 | <a name="module_virtual_network"></a> [virtual\_network](#module\_virtual\_network) | terraform.registry.launch.nttdata.com/module_primitive/virtual_network/azurerm | ~> 4.0 |
 | <a name="module_private_dns_zone"></a> [private\_dns\_zone](#module\_private\_dns\_zone) | terraform.registry.launch.nttdata.com/module_primitive/private_dns_zone/azurerm | ~> 2.0 |
 | <a name="module_postgresql_server"></a> [postgresql\_server](#module\_postgresql\_server) | ../.. | n/a |
@@ -45,7 +46,7 @@ When running locally without service principal credentials, set `var.use_service
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br/>    name       = string<br/>    max_length = optional(number, 60)<br/>  }))</pre> | <pre>{<br/>  "postgresql_server": {<br/>    "max_length": 60,<br/>    "name": "psql"<br/>  },<br/>  "private_endpoint": {<br/>    "max_length": 80,<br/>    "name": "pe"<br/>  },<br/>  "private_service_connection": {<br/>    "max_length": 80,<br/>    "name": "pesc"<br/>  },<br/>  "resource_group": {<br/>    "max_length": 60,<br/>    "name": "rg"<br/>  },<br/>  "virtual_network": {<br/>    "max_length": 60,<br/>    "name": "vnet"<br/>  }<br/>}</pre> | no |
+| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | A map of key to resource\_name that will be used by tf-launch-module\_library-resource\_name to generate resource names | <pre>map(object({<br/>    name       = string<br/>    max_length = optional(number, 60)<br/>  }))</pre> | <pre>{<br/>  "log_analytics_workspace": {<br/>    "max_length": 63,<br/>    "name": "law"<br/>  },<br/>  "postgresql_server": {<br/>    "max_length": 60,<br/>    "name": "psql"<br/>  },<br/>  "private_endpoint": {<br/>    "max_length": 80,<br/>    "name": "pe"<br/>  },<br/>  "private_service_connection": {<br/>    "max_length": 80,<br/>    "name": "pesc"<br/>  },<br/>  "resource_group": {<br/>    "max_length": 60,<br/>    "name": "rg"<br/>  },<br/>  "virtual_network": {<br/>    "max_length": 60,<br/>    "name": "vnet"<br/>  }<br/>}</pre> | no |
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Number that represents the instance of the environment. | `number` | `0` | no |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Number that represents the instance of the resource. | `number` | `0` | no |
 | <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | (Required) Name of the product family for which the resource is created.<br/>    Example: org\_name, department\_name. | `string` | `"launch"` | no |
@@ -92,4 +93,8 @@ When running locally without service principal credentials, set `var.use_service
 | <a name="output_postgres_fqdn"></a> [postgres\_fqdn](#output\_postgres\_fqdn) | n/a |
 | <a name="output_vnet_id"></a> [vnet\_id](#output\_vnet\_id) | n/a |
 | <a name="output_resource_group_name"></a> [resource\_group\_name](#output\_resource\_group\_name) | n/a |
+| <a name="output_diagnostic_setting_id"></a> [diagnostic\_setting\_id](#output\_diagnostic\_setting\_id) | n/a |
+| <a name="output_diagnostic_setting_name"></a> [diagnostic\_setting\_name](#output\_diagnostic\_setting\_name) | n/a |
+| <a name="output_diagnostic_log_analytics_workspace_id"></a> [diagnostic\_log\_analytics\_workspace\_id](#output\_diagnostic\_log\_analytics\_workspace\_id) | n/a |
+| <a name="output_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#output\_diagnostic\_log\_categories) | n/a |
 <!-- END_TF_DOCS -->

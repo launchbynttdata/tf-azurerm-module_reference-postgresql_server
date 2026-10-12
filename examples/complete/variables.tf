@@ -38,6 +38,10 @@ variable "resource_names_map" {
       name       = "rg"
       max_length = 60
     }
+    log_analytics_workspace = {
+      name       = "law"
+      max_length = 63
+    }
   }
 }
 

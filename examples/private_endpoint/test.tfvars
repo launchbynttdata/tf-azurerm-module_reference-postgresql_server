@@ -9,5 +9,6 @@ server_configuration = {
 
 create_private_endpoint = true
 
-location = "northeurope"
-zone     = "1"
+instance_resource = 1
+location          = "northeurope"
+zone              = "1"

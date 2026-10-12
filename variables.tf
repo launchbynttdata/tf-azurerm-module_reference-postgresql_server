@@ -160,6 +160,12 @@ variable "log_analytics_workspace_id" {
   }
 }
 
+variable "enable_diagnostics" {
+  description = "Whether to create a diagnostic setting. Set this to true when log_analytics_workspace_id is supplied, including when its value is unknown until apply."
+  type        = bool
+  default     = false
+}
+
 variable "diagnostic_setting_name" {
   description = "Name of the PostgreSQL Flexible Server diagnostic setting."
   type        = string

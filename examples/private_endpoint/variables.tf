@@ -34,6 +34,10 @@ variable "resource_names_map" {
       name       = "pesc"
       max_length = 80
     }
+    log_analytics_workspace = {
+      name       = "law"
+      max_length = 63
+    }
     resource_group = {
       name       = "rg"
       max_length = 60

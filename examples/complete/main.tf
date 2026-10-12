@@ -170,6 +170,7 @@ module "postgresql_server" {
 
   tags = merge(var.tags, { resource_name = module.resource_names["postgresql_server"].standard })
 
+  enable_diagnostics         = true
   log_analytics_workspace_id = var.log_analytics_workspace_id != null ? var.log_analytics_workspace_id : module.diagnostics_workspace[0].id
   diagnostic_setting_name    = var.diagnostic_setting_name
   diagnostic_log_categories  = var.diagnostic_log_categories

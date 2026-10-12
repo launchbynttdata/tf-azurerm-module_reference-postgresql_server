@@ -66,10 +66,10 @@ output "diagnostic_setting_name" {
 
 output "diagnostic_log_analytics_workspace_id" {
   description = "Log Analytics workspace ID receiving PostgreSQL diagnostic logs, or null when diagnostic settings are disabled."
-  value       = var.log_analytics_workspace_id
+  value       = var.enable_diagnostics ? var.log_analytics_workspace_id : null
 }
 
 output "diagnostic_log_categories" {
   description = "PostgreSQL log categories enabled by this module, or an empty list when diagnostic settings are disabled."
-  value       = var.log_analytics_workspace_id == null ? [] : var.diagnostic_log_categories
+  value       = var.enable_diagnostics ? var.diagnostic_log_categories : []
 }

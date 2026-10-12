@@ -80,7 +80,7 @@ module "postgresql_server_diagnostic_setting" {
   source  = "terraform.registry.launch.nttdata.com/module_primitive/monitor_diagnostic_setting/azurerm"
   version = "~> 4.0"
 
-  count = var.log_analytics_workspace_id != null ? 1 : 0
+  count = var.enable_diagnostics ? 1 : 0
 
   name                       = var.diagnostic_setting_name
   target_resource_id         = module.postgresql_server.id

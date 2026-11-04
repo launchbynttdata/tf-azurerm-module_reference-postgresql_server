@@ -1,32 +1,21 @@
 version: 2
-
-multi-ecosystem-groups:
-  module:
-    schedule:
-      interval: "weekly"
-  workflows:
-    schedule:
-      interval: "weekly"
-
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
-    multi-ecosystem-group: "workflows"
-    patterns: ["*"]
-
+    schedule:
+      interval: "weekly"
   - package-ecosystem: "gomod"
     directory: "/"
-    multi-ecosystem-group: "module"
-    patterns: ["*"]
-
+    schedule:
+      interval: "weekly"
   - package-ecosystem: "terraform"
     directory: "/"
-    multi-ecosystem-group: "module"
-    patterns: ["*"]
-    ignore:
-      - dependency-name: "hashicorp/*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "microsoft/*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "azure/*"
-        update-types: ["version-update:semver-major"]
+    schedule:
+      interval: "weekly"
+      ignore:
+        - dependency-name: "hashicorp/*"
+          update-types: ["version-update:semver-major"]
+        - dependency-name: "microsoft/*"
+          update-types: ["version-update:semver-major"]
+        - dependency-name: "azure/*"
+          update-types: ["version-update:semver-major"]

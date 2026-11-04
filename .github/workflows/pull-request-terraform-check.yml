@@ -2,8 +2,8 @@ name: Check Azure Terraform Code
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
-    branches: [main]
+    types: [ opened, reopened, synchronize, ready_for_review ]
+    branches: [ main ]
 
 permissions:
   id-token: write

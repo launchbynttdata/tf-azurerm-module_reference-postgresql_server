@@ -26,6 +26,7 @@ const (
 )
 
 func TestPostgresqlModule(t *testing.T) {
+	t.Setenv("TF_CLI_ARGS_destroy", "-parallelism=1")
 
 	ctx := types.CreateTestContextBuilder().
 		SetTestConfig(&testimpl.ThisTFModuleConfig{}).

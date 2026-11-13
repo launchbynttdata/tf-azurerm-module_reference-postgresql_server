@@ -1,12 +1,10 @@
-# https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-server-parameters
-server_configuration = {
-  "backslash_quote" = "on"
-  "log_connections" = "on"
-}
+# Avoid optional server parameters in CI; configuration delete can race server destroy.
+server_configuration = {}
 
-location = "northeurope"
-zone     = "1"
-
+instance_resource          = 1
+location                   = "northeurope"
+zone                       = "1"
+time_to_wait_after_destroy = "120s"
 
 action_group = {
   name       = "test-action"

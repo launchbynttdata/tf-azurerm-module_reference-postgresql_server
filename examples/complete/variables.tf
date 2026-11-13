@@ -364,7 +364,7 @@ variable "tags" {
 }
 
 variable "log_analytics_workspace_id" {
-  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided."
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Omit to provision a workspace in this example."
   type        = string
   default     = null
 }
@@ -376,7 +376,7 @@ variable "diagnostic_setting_name" {
 }
 
 variable "diagnostic_log_categories" {
-  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics."
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set)."
   type        = list(string)
   default = [
     "PostgreSQLLogs",
@@ -386,6 +386,7 @@ variable "diagnostic_log_categories" {
     "PostgreSQLFlexTableStats",
     "PostgreSQLFlexDatabaseXacts",
     "PostgreSQLFlexPGBouncer",
+    "PostgreSQLQueryStoreSqlText",
   ]
 }
 

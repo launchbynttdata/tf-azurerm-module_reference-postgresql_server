@@ -48,4 +48,18 @@ func TestPostgresqlServer(t *testing.T, ctx types.TestContext) {
 
 		assert.Equal(t, postgresqlName, *postgresqlServer.Name)
 	})
+
+	t.Run("postgresqlDiagnosticSettingConfigured", func(t *testing.T) {
+		diagnosticSettingID := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_setting_id")
+		diagnosticSettingName := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_setting_name")
+		workspaceID := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_log_analytics_workspace_id")
+		categories := terraform.OutputList(t, ctx.TerratestTerraformOptions(), "diagnostic_log_categories")
+
+		assert.NotEmpty(t, diagnosticSettingID)
+		assert.Equal(t, "postgresql-server-diagnostics", diagnosticSettingName)
+		assert.NotEmpty(t, workspaceID)
+		assert.GreaterOrEqual(t, len(categories), 7)
+		assert.Contains(t, categories, "PostgreSQLLogs")
+		assert.Contains(t, categories, "PostgreSQLFlexDatabaseXacts")
+	})
 }

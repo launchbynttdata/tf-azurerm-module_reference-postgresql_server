@@ -38,6 +38,10 @@ func TestPostgresqlModule(t *testing.T) {
 				"IS_TERRAFORM_IDEMPOTENT_APPLY": false,
 				"SKIP_TEST":                     false,
 			},
+			"private_endpoint": {
+				"IS_TERRAFORM_IDEMPOTENT_APPLY": false,
+				"SKIP_TEST":                     false,
+			},
 		}).
 		Build()
 

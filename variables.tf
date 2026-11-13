@@ -150,7 +150,7 @@ variable "server_configuration" {
 }
 
 variable "log_analytics_workspace_id" {
-  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Diagnostic settings are created when this is provided."
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Required when enable_diagnostics is true."
   type        = string
   default     = null
 
@@ -161,9 +161,14 @@ variable "log_analytics_workspace_id" {
 }
 
 variable "enable_diagnostics" {
-  description = "Whether to create a diagnostic setting. Set this to true when log_analytics_workspace_id is supplied, including when its value is unknown until apply."
+  description = "Whether to create a diagnostic setting pointing at log_analytics_workspace_id."
   type        = bool
   default     = false
+
+  validation {
+    condition     = !var.enable_diagnostics || var.log_analytics_workspace_id != null
+    error_message = "log_analytics_workspace_id is required when enable_diagnostics is true."
+  }
 }
 
 variable "diagnostic_setting_name" {
@@ -178,7 +183,7 @@ variable "diagnostic_setting_name" {
 }
 
 variable "diagnostic_log_categories" {
-  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics."
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set)."
   type        = list(string)
   default = [
     "PostgreSQLLogs",
@@ -188,6 +193,7 @@ variable "diagnostic_log_categories" {
     "PostgreSQLFlexTableStats",
     "PostgreSQLFlexDatabaseXacts",
     "PostgreSQLFlexPGBouncer",
+    "PostgreSQLQueryStoreSqlText",
   ]
 
   validation {

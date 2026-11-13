@@ -1,4 +1,7 @@
-# Minimal server_configuration for CI: parameter deletes often return ServerIsBusy during destroy.
+# Known coverage gap: the optional `server_configuration` path has no integration coverage.
+# Deleting a server parameter during teardown can race the server destroy and fail with
+# ServerIsBusy, so CI keeps this empty. Follow-up: fix the teardown ordering, then restore one
+# deterministic parameter here and in examples/complete/test.tfvars.
 server_configuration = {}
 
 # uncomment when running locally without a service principal

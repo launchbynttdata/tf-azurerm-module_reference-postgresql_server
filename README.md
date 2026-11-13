@@ -113,7 +113,9 @@ If `make check` target is successful, developer is good to commit the code to pr
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_terraform"></a> [terraform](#provider\_terraform) | n/a |
 
 ## Modules
 
@@ -131,7 +133,9 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [terraform_data.diagnostics_configuration](https://registry.terraform.io/providers/hashicorp/terraform/latest/docs/resources/data) | resource |
 
 ## Inputs
 
@@ -152,7 +156,7 @@ No resources.
 | <a name="input_log_analytics_workspace_id"></a> [log\_analytics\_workspace\_id](#input\_log\_analytics\_workspace\_id) | Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Set enable\_diagnostics = true when this is provided. | `string` | `null` | no |
 | <a name="input_enable_diagnostics"></a> [enable\_diagnostics](#input\_enable\_diagnostics) | Whether to create a diagnostic setting pointing at log\_analytics\_workspace\_id. | `bool` | `false` | no |
 | <a name="input_diagnostic_setting_name"></a> [diagnostic\_setting\_name](#input\_diagnostic\_setting\_name) | Name of the PostgreSQL Flexible Server diagnostic setting. | `string` | `"postgresql-server-diagnostics"` | no |
-| <a name="input_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#input\_diagnostic\_log\_categories) | PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set). | `list(string)` | <pre>[<br/>  "PostgreSQLLogs",<br/>  "PostgreSQLFlexSessions",<br/>  "PostgreSQLFlexQueryStoreRuntime",<br/>  "PostgreSQLFlexQueryStoreWaitStats",<br/>  "PostgreSQLFlexTableStats",<br/>  "PostgreSQLFlexDatabaseXacts",<br/>  "PostgreSQLFlexPGBouncer",<br/>  "PostgreSQLQueryStoreSqlText"<br/>]</pre> | no |
+| <a name="input_diagnostic_log_categories"></a> [diagnostic\_log\_categories](#input\_diagnostic\_log\_categories) | PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set). The default includes PostgreSQLQueryStoreSqlText, which exports captured SQL text (it can contain sensitive literals) and increases Log Analytics ingestion when query store is enabled. Remove it from the list to opt out. | `list(string)` | <pre>[<br/>  "PostgreSQLLogs",<br/>  "PostgreSQLFlexSessions",<br/>  "PostgreSQLFlexQueryStoreRuntime",<br/>  "PostgreSQLFlexQueryStoreWaitStats",<br/>  "PostgreSQLFlexTableStats",<br/>  "PostgreSQLFlexDatabaseXacts",<br/>  "PostgreSQLFlexPGBouncer",<br/>  "PostgreSQLQueryStoreSqlText"<br/>]</pre> | no |
 | <a name="input_delegated_subnet_id"></a> [delegated\_subnet\_id](#input\_delegated\_subnet\_id) | The ID of the subnet to which the Postgres Flexible Server is delegated | `string` | `null` | no |
 | <a name="input_private_dns_zone_id"></a> [private\_dns\_zone\_id](#input\_private\_dns\_zone\_id) | The ID of the private DNS zone. Required when `delegated_subnet_id` is set | `string` | `null` | no |
 | <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled) | Whether or not public network access is allowed for this server | `bool` | `false` | no |

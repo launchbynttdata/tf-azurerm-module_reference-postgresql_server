@@ -178,7 +178,7 @@ variable "diagnostic_setting_name" {
 }
 
 variable "diagnostic_log_categories" {
-  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set)."
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set). The default includes PostgreSQLQueryStoreSqlText, which exports captured SQL text (it can contain sensitive literals) and increases Log Analytics ingestion when query store is enabled. Remove it from the list to opt out."
   type        = list(string)
   default = [
     "PostgreSQLLogs",

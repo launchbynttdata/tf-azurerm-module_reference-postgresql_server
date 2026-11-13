@@ -194,16 +194,22 @@ module "monitor_metric_alert" {
   depends_on = [module.postgresql_server]
 }
 
-check "diagnostics_configuration" {
-  assert {
-    condition = !var.enable_diagnostics || (
-      var.log_analytics_workspace_id != null && trimspace(var.log_analytics_workspace_id) != ""
-    )
-    error_message = "log_analytics_workspace_id is required when enable_diagnostics is true."
-  }
+# Cross-field validation for diagnostics. Preconditions fail the plan (unlike `check` assertions,
+# which only warn) and work with the declared Terraform range (~> 1.5). Cross-variable input
+# validation would need Terraform >= 1.9, and a `lifecycle` block is not allowed on module blocks.
+resource "terraform_data" "diagnostics_configuration" {
+  lifecycle {
+    precondition {
+      # Ternary instead of `&&`: Terraform does not short-circuit, and trimspace(null) is an error.
+      condition = !var.enable_diagnostics || (
+        var.log_analytics_workspace_id != null ? trimspace(var.log_analytics_workspace_id) != "" : false
+      )
+      error_message = "log_analytics_workspace_id is required when enable_diagnostics is true."
+    }
 
-  assert {
-    condition     = var.log_analytics_workspace_id == null || var.enable_diagnostics
-    error_message = "Set enable_diagnostics = true when log_analytics_workspace_id is provided."
+    precondition {
+      condition     = var.log_analytics_workspace_id == null || var.enable_diagnostics
+      error_message = "Set enable_diagnostics = true when log_analytics_workspace_id is provided."
+    }
   }
 }

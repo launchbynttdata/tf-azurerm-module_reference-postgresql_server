@@ -150,7 +150,7 @@ variable "server_configuration" {
 }
 
 variable "log_analytics_workspace_id" {
-  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Required when enable_diagnostics is true."
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Set enable_diagnostics = true when this is provided."
   type        = string
   default     = null
 
@@ -164,11 +164,6 @@ variable "enable_diagnostics" {
   description = "Whether to create a diagnostic setting pointing at log_analytics_workspace_id."
   type        = bool
   default     = false
-
-  validation {
-    condition     = !var.enable_diagnostics || var.log_analytics_workspace_id != null
-    error_message = "log_analytics_workspace_id is required when enable_diagnostics is true."
-  }
 }
 
 variable "diagnostic_setting_name" {

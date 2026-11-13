@@ -193,3 +193,17 @@ module "monitor_metric_alert" {
 
   depends_on = [module.postgresql_server]
 }
+
+check "diagnostics_configuration" {
+  assert {
+    condition = !var.enable_diagnostics || (
+      var.log_analytics_workspace_id != null && trimspace(var.log_analytics_workspace_id) != ""
+    )
+    error_message = "log_analytics_workspace_id is required when enable_diagnostics is true."
+  }
+
+  assert {
+    condition     = var.log_analytics_workspace_id == null || var.enable_diagnostics
+    error_message = "Set enable_diagnostics = true when log_analytics_workspace_id is provided."
+  }
+}

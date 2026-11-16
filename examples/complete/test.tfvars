@@ -1,6 +1,6 @@
 server_configuration = {}
 
-instance_resource          = 1
+instance_resource          = 3
 location                   = "northeurope"
 zone                       = "1"
 time_to_wait_after_destroy = "120s"

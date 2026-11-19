@@ -45,5 +45,5 @@ func TestPostgresqlModule(t *testing.T) {
 		}).
 		Build()
 
-	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestPostgresqlServer)
+	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestComposableComplete)
 }

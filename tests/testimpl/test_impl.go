@@ -15,6 +15,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/launchbynttdata/lcaf-component-terratest/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 // expectedDiagnosticLogCategories is the full PostgreSQL Flexible Server log category set required
@@ -30,7 +31,23 @@ var expectedDiagnosticLogCategories = []string{
 	"PostgreSQLQueryStoreSqlText",
 }
 
-func TestPostgresqlServer(t *testing.T, ctx types.TestContext) {
+// TestComposableComplete is the entry point for the functional (post_deploy_functional) suite.
+func TestComposableComplete(t *testing.T, ctx types.TestContext) {
+	verifyPostgresqlServer(t, ctx)
+}
+
+// TestComposableCompleteReadOnly is the entry point for the readonly
+// (post_deploy_functional_readonly) suite. lib.RunNonDestructiveTest requires the name of the
+// function it runs to start with "TestComposable". It shares verifyPostgresqlServer with the
+// functional suite, which is valid only because that function performs reads and assertions and
+// never mutates state.
+func TestComposableCompleteReadOnly(t *testing.T, ctx types.TestContext) {
+	verifyPostgresqlServer(t, ctx)
+}
+
+// verifyPostgresqlServer checks the deployed server and its diagnostic setting through the
+// Azure APIs. It must stay read-only: both suites call it.
+func verifyPostgresqlServer(t *testing.T, ctx types.TestContext) {
 	subscriptionId := os.Getenv("ARM_SUBSCRIPTION_ID")
 	if len(subscriptionId) == 0 {
 		t.Fatal("ARM_SUBSCRIPTION_ID environment variable is not set")
@@ -38,7 +55,7 @@ func TestPostgresqlServer(t *testing.T, ctx types.TestContext) {
 
 	credential, err := azidentity.NewDefaultAzureCredential(nil)
 	if err != nil {
-		t.Fatalf("Unable to get credentials: %e\n", err)
+		t.Fatalf("Unable to get credentials: %v\n", err)
 	}
 
 	options := arm.ClientOptions{
@@ -76,9 +93,9 @@ func TestPostgresqlServer(t *testing.T, ctx types.TestContext) {
 		diagnosticSettingName := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_setting_name")
 		expectedWorkspaceID := terraform.Output(t, ctx.TerratestTerraformOptions(), "diagnostic_log_analytics_workspace_id")
 
-		assert.NotEmpty(t, serverID)
-		assert.NotEmpty(t, diagnosticSettingName)
-		assert.NotEmpty(t, expectedWorkspaceID)
+		require.NotEmpty(t, serverID)
+		require.NotEmpty(t, diagnosticSettingName)
+		require.NotEmpty(t, expectedWorkspaceID)
 
 		diagnosticSetting, err := diagnosticSettingsClient.Get(context.Background(), serverID, diagnosticSettingName, nil)
 		if err != nil {

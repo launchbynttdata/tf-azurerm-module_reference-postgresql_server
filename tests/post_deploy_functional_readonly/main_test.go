@@ -32,13 +32,13 @@ func TestPostgresqlModule(t *testing.T) {
 		SetTestConfigFolderName(testConfigsExamplesFolderDefault).
 		SetTestConfigFileName(infraTFVarFileNameDefault).
 		SetTestSpecificFlags(map[string]types.TestFlags{
-			// Behind the scenes creation of a DNS record causes this to be non-idempotent
+			// The readonly runner does not apply, so IS_TERRAFORM_IDEMPOTENT_APPLY is not set here.
 			"complete": {
-				"IS_TERRAFORM_IDEMPOTENT_APPLY": false,
 				"SKIP_TEST": false,
 			},
 		}).
 		Build()
 
-	lib.RunNonDestructiveTest(t, *ctx, testimpl.TestPostgresqlServer)
+	// lib.RunNonDestructiveTest requires a testimpl function whose name starts with "TestComposable".
+	lib.RunNonDestructiveTest(t, *ctx, testimpl.TestComposableCompleteReadOnly)
 }

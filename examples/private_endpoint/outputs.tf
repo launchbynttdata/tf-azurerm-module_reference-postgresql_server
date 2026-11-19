@@ -29,3 +29,19 @@ output "vnet_id" {
 output "resource_group_name" {
   value = module.postgresql_server.resource_group_name
 }
+
+output "diagnostic_setting_id" {
+  value = module.postgresql_server.diagnostic_setting_id
+}
+
+output "diagnostic_setting_name" {
+  value = module.postgresql_server.diagnostic_setting_name
+}
+
+output "diagnostic_log_analytics_workspace_id" {
+  value = module.postgresql_server.diagnostic_log_analytics_workspace_id
+}
+
+output "diagnostic_log_categories" {
+  value = module.postgresql_server.diagnostic_log_categories
+}

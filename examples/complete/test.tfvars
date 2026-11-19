@@ -1,15 +1,9 @@
-# https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/concepts-server-parameters
-server_configuration = {
-  "backslash_quote" = "on"
-  "log_connections" = "on"
-}
+server_configuration = {}
 
-# uncomment when running locally without a service principal
-# use_service_principal = false
-
-zone = "1"
-
-use_service_principal = false
+instance_resource          = 3
+location                   = "northeurope"
+zone                       = "1"
+time_to_wait_after_destroy = "120s"
 
 action_group = {
   name       = "test-action"

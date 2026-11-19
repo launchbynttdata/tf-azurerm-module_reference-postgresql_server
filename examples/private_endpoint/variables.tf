@@ -34,6 +34,10 @@ variable "resource_names_map" {
       name       = "pesc"
       max_length = 80
     }
+    log_analytics_workspace = {
+      name       = "law"
+      max_length = 63
+    }
     resource_group = {
       name       = "rg"
       max_length = 60
@@ -357,4 +361,31 @@ variable "tags" {
   description = "A mapping of tags to assign to the resource."
   type        = map(string)
   default     = {}
+}
+
+variable "log_analytics_workspace_id" {
+  description = "Resource ID of the Log Analytics workspace for PostgreSQL diagnostic logs. Omit to provision a workspace in this example."
+  type        = string
+  default     = null
+}
+
+variable "diagnostic_setting_name" {
+  description = "Name of the PostgreSQL Flexible Server diagnostic setting."
+  type        = string
+  default     = "postgresql-server-diagnostics"
+}
+
+variable "diagnostic_log_categories" {
+  description = "PostgreSQL Flexible Server diagnostic log categories to send to Log Analytics (Azure Monitor allLogs set)."
+  type        = list(string)
+  default = [
+    "PostgreSQLLogs",
+    "PostgreSQLFlexSessions",
+    "PostgreSQLFlexQueryStoreRuntime",
+    "PostgreSQLFlexQueryStoreWaitStats",
+    "PostgreSQLFlexTableStats",
+    "PostgreSQLFlexDatabaseXacts",
+    "PostgreSQLFlexPGBouncer",
+    "PostgreSQLQueryStoreSqlText",
+  ]
 }

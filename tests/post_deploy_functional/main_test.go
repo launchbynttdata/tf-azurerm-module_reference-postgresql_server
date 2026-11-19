@@ -26,6 +26,7 @@ const (
 )
 
 func TestPostgresqlModule(t *testing.T) {
+	t.Setenv("TF_CLI_ARGS_destroy", "-parallelism=1")
 
 	ctx := types.CreateTestContextBuilder().
 		SetTestConfig(&testimpl.ThisTFModuleConfig{}).
@@ -37,8 +38,12 @@ func TestPostgresqlModule(t *testing.T) {
 				"IS_TERRAFORM_IDEMPOTENT_APPLY": false,
 				"SKIP_TEST":                     false,
 			},
+			"private_endpoint": {
+				"IS_TERRAFORM_IDEMPOTENT_APPLY": false,
+				"SKIP_TEST":                     false,
+			},
 		}).
 		Build()
 
-	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestPostgresqlServer)
+	lib.RunSetupTestTeardown(t, *ctx, testimpl.TestComposableComplete)
 }
